@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>电力收费管理系统 - 登录页面</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-image: url('img/img.png'); /* Replace with your image path */
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      max-width: 360px;
+      width: 100%;
+    }
+
+    .login-title {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #1e9fff; /* Blue color for title */
+    }
+
+    .login-form {
+      text-align: left;
+    }
+
+    .form-item {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333; /* Dark gray color for labels */
+    }
+
+    .form-input {
+      width: 100%;
+      height: 40px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+
+    .password-input-container {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      color: #1e9fff;
+      cursor: pointer;
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 40px;
+      background-color: #1e9fff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .login-btn:hover {
+      background-color: #0090ff;
+    }
+
+    .register-link {
+      color: #1e9fff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .register-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<div class="login-container">
+  <h2 class="login-title">电力收费管理系统 - 登录</h2>
+  <div class="login-box">
+    <form id="loginForm" class="login-form layui-form">
+      <div class="form-item">
+        <label class="form-label">用户名：</label>
+        <input type="text" name="username" placeholder="请输入用户名" autocomplete="off" class="form-input">
+      </div>
+      <div class="form-item">
+        <label class="form-label">密码：</label>
+        <div class="password-input-container">
+          <input type="password" id="passwordInput" name="password" placeholder="请输入密码" autocomplete="off" class="form-input">
+          <span id="togglePassword" class="toggle-password" onclick="togglePassword()">显示密码</span>
+        </div>
+      </div>
+      <div class="form-item">
+        <button type="button" class="login-btn" onclick="submitForm()">立即登录</button>
+      </div>
+      <div class="form-item">
+        <a href="register.html" class="register-link">注册账号</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="//cdn.staticfile.org/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  function togglePassword() {
+    var pwdInput = document.getElementById('passwordInput');
+    var toggleBtn = document.getElementById('togglePassword');
+
+    if (pwdInput.type === 'password') {
+      pwdInput.type = 'text';
+      toggleBtn.textContent = '隐藏密码';
+    } else {
+      pwdInput.type = 'password';
+      toggleBtn.textContent = '显示密码';
+    }
+  }
+
+  function submitForm() {
+
+    var username = document.getElementsByName('username')[0].value;
+    var password = document.getElementsByName('password')[0].value;
+    localStorage.setItem('username', username);
+
+    fetch('http://localhost:8080/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password),
+    })
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                alert('登录成功！');
+                if (data.msg === '1') {
+                  window.location.href = 'MainAdmin.html';
+                } else if (data.msg === '2') {
+                  window.location.href = 'MainUser.html';
+                } else {
+                  // Handle unexpected role or other cases
+                }
+              } else {
+                alert('登录失败，请检查用户名和密码！');
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('登录失败，请稍后重试！');
+            });
+  }
+</script>
+</body>
+</html>

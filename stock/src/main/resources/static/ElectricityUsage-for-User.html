@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电力使用记录管理</title>
+    <!-- 引入layui样式 -->
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.6.8/css/layui.css" media="all">
+    <style>
+        .container {
+            margin: 20px;
+        }
+        .search-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .search-item input {
+            margin-right: 10px;
+        }
+        .search-btn {
+            margin-left: 10px;
+        }
+        .page-title {
+            text-align: center; /* 文字居中 */
+            color: #333; /* 设置标题颜色 */
+            margin-bottom: 50px; /* 设置标题下边距 */
+            margin-top: 30px; /* 设置标题下边距 */
+
+        }
+        .page-title span {
+            background-color: #5FB878; /* 设置标题背景颜色 */
+            color: #fff; /* 设置标题文字颜色 */
+            padding: 10px 20px; /* 设置标题内边距 */
+            border-radius: 5px; /* 设置标题圆角 */
+        }
+    </style>
+</head>
+<body>
+<h1 class="page-title"><span>我的电力使用记录管理</span></h1>
+<div class="container">
+    <div class="layui-form" action="">
+        <div class="search-item">
+            <input type="text" name="usageType" id="usageType" placeholder="请输入用电类型" class="layui-input">
+            <button class="layui-btn layui-btn-warm search-btn" onclick="searchUsageByType()">按类型查询</button>
+            <input type="text" name="usageAmount" id="usageAmount" placeholder="请输入用电量" class="layui-input">
+            <button class="layui-btn layui-btn-danger search-btn" onclick="searchUsageByAmount()">按用电量查询</button>
+        </div>
+    </div>
+    <table id="usageTable" class="layui-table" lay-filter="usageTable"></table>
+    <div id="pagination"></div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://www.layuicdn.com/layui-v2.6.8/layui.js"></script>
+<script>
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要加1并且补0
+        const day = String(date.getDate()).padStart(2, '0'); // 获取日期并且补0
+        return `${year}-${month}-${day}`;
+    }
+    var usageData = []; // Global variable to store usage data
+    var currentPage = 1;
+    var pageSize = 20;
+
+    $(document).ready(function () {
+        // Load usage data from the backend
+        $.get("http://localhost:8080/electricity/usage/all", function(data) {
+            usageData = data; // Store the received data in the global variable
+
+            // Automatically filter and display records for the logged-in user
+            var username = localStorage.getItem('username');
+            if (username) {
+                // Filter usageData for records with matching username
+                var filteredData = usageData.filter(function(usage) {
+                    return usage.username === username;
+                });
+                renderTable(filteredData);
+                renderPagination(filteredData.length);
+            } else {
+                alert("未找到登录用户信息，请先登录！");
+            }
+        });
+    });
+
+    function renderTable(data) {
+        layui.use('table', function(){
+            var table = layui.table;
+
+            // Display table headers
+            table.render({
+                elem: '#usageTable',
+                cols: [[
+                    {field: 'usageId', title: '记录ID', width: '10%', sort: true},
+                    {field: 'userId', title: '用户ID', width: '10%'},
+                    {field: 'username', title: '用户名', width: '20%'},
+                    {field: 'usageAmount', title: '用电量', width: '20%', sort: true},
+                    {field: 'usageType', title: '用电类型', width: '20%', sort: true},
+                    {field: 'usageDate', title: '用电日期', width: '20%', templet: function(d){
+                            return formatDate(d.usageDate);
+                        }},
+                ]],
+                data: data
+            });
+
+            // Table toolbar (edit and delete buttons)
+            table.on('tool(usageTable)', function(obj){
+                var data = obj.data;
+                if(obj.event === 'edit'){
+                    editUsage(data.usageId);
+                } else if(obj.event === 'delete'){
+                    deleteUsage(data.usageId);
+                }
+            });
+        });
+    }
+
+    function renderPagination(totalItems) {
+        layui.use(['laypage'], function(){
+            var laypage = layui.laypage;
+
+            laypage.render({
+                elem: 'pagination',
+                count: totalItems,
+                limit: pageSize,
+                curr: currentPage,
+                jump: function(obj, first){
+                    if(!first){
+                        currentPage = obj.curr;
+                        var start = (obj.curr - 1) * pageSize;
+                        var end = obj.curr * pageSize;
+                        renderTable(usageData.slice(start, end));
+                    }
+                }
+            });
+        });
+    }
+
+
+    function searchUsageByType() {
+        var usageType = $("#usageType").val().trim();
+        if (usageType === "") {
+            alert("请输入用电类型进行查询！");
+            return;
+        }
+
+        var filteredData = usageData.filter(function(usage) {
+            return usage.usageType.toLowerCase().includes(usageType.toLowerCase());
+        });
+
+        if (filteredData.length > 0) {
+            renderTable(filteredData); // Show the found usage records
+            renderPagination(filteredData.length); // Pagination based on the number of items found
+        } else {
+            alert("未找到该用电类型对应的用电记录！");
+        }
+    }
+
+    function searchUsageByAmount() {
+        var usageAmount = $("#usageAmount").val().trim();
+        if (usageAmount === "") {
+            alert("请输入用电量进行查询！");
+            return;
+        }
+
+        var filteredData = usageData.filter(function(usage) {
+            return usage.usageAmount.toString().toLowerCase().includes(usageAmount.toLowerCase());
+        });
+
+        if (filteredData.length > 0) {
+            renderTable(filteredData); // Show the found usage records
+            renderPagination(filteredData.length); // Pagination based on the number of items found
+        } else {
+            alert("未找到该用电量对应的用电记录！");
+        }
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人信息查询与修改</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #888;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn-container button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div class="result-container" id="userInfoContainer">
+    </div>
+
+    <div class="btn-container">
+        <button onclick="openEditModal()">修改个人信息</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <h2>修改个人信息</h2>
+        <form id="editForm">
+            <div class="form-group">
+                <label for="password">密码:</label>
+                <input type="password" id="password" name="password" placeholder="请输入密码">
+            </div>
+            <div class="form-group">
+                <label for="age">年龄:</label>
+                <input type="text" id="age" name="age" placeholder="请输入年龄">
+            </div>
+            <div class="form-group">
+                <label for="gender">性别:</label>
+                <input type="text" id="gender" name="gender" placeholder="请输入性别">
+            </div>
+            <div class="form-group">
+                <label for="contactInfo">联系方式:</label>
+                <input type="text" id="contactInfo" name="contactInfo" placeholder="请输入联系方式">
+            </div>
+            <div class="form-group">
+                <label for="address">地址:</label>
+                <input type="text" id="address" name="address" placeholder="请输入地址">
+            </div>
+            <button type="submit">保存修改</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchUserInfo();
+    });
+
+    function fetchUserInfo() {
+        const username = localStorage.getItem('username');
+        if (!username) {
+            alert("用户名未设置或获取失败！");
+            return;
+        }
+
+        fetch(`http://localhost:8080/users/username/${username}`)
+            .then(response => response.json())
+            .then(data => {
+                const userInfoContainer = document.getElementById('userInfoContainer');
+                userInfoContainer.innerHTML = `
+                    <h3>个人信息</h3>
+                    <p><strong>用户名:</strong> ${data.username}</p>
+                    <p><strong>密码:</strong> ${data.password}</p>
+                    <p><strong>年龄:</strong> ${data.age}</p>
+                    <p><strong>性别:</strong> ${data.gender}</p>
+                    <p><strong>联系方式:</strong> ${data.contactInfo}</p>
+                    <p><strong>地址:</strong> ${data.address}</p>
+                    <p><strong>角色:</strong> ${data.role}</p>
+                `;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('查询个人信息失败！');
+            });
+    }
+
+    function openEditModal() {
+        const modal = document.getElementById('editModal');
+        modal.style.display = "block";
+    }
+
+    function closeEditModal() {
+        const modal = document.getElementById('editModal');
+        modal.style.display = "none";
+    }
+
+    // Submit form handler
+    const editForm = document.getElementById('editForm');
+    editForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(editForm);
+        const requestBody = {};
+
+        formData.forEach((value, key) => {
+            requestBody[key] = value;
+        });
+
+        const username = localStorage.getItem('username');
+
+        fetch(`http://localhost:8080/users/username/${username}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.msg); // Show response message
+                closeEditModal(); // Close modal after successful update
+                fetchUserInfo(); // Refresh user information
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('更新个人信息失败！');
+            });
+    });
+</script>
+
+</body>
+</html>

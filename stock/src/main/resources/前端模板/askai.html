@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI股票智能ChatBot</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            font-family: 'Arial', sans-serif;
+        }
+        .chat-container {
+            width: 80%; /* 占据屏幕80%的宽度 */
+            height: 80%; /* 占据屏幕80%的高度 */
+            margin: 0 auto; /* 水平居中 */
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .chat-header {
+            padding: 15px;
+            background-color: #009688;
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            border-bottom: 1px solid #ccc;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        .chat-message {
+            margin-bottom: 10px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .chat-message.user {
+            text-align: right;
+        }
+        .chat-message.ai {
+            text-align: left;
+        }
+        .chat-message .content {
+            display: inline-block;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            max-width: 70%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .chat-message.user .content {
+            background-color: #009688;
+            color: #fff;
+        }
+        .chat-message.ai .content {
+            background-color: #e0e0e0;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ccc;
+        }
+        .input-container select,
+        .input-container input,
+        .input-container button {
+            margin-right: 10px;
+        }
+        .input-container select,
+        .input-container input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+        .input-container button {
+            padding: 8px 16px;
+            background-color: #009688;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .input-container button:hover {
+            background-color: #007d6a;
+        }
+        .clear-history-btn {
+            padding: 8px 16px;
+            background-color: #ff5722;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: auto;
+            transition: background-color 0.3s ease;
+        }
+        .clear-history-btn:hover {
+            background-color: #e64a19;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <!-- 标题区域 -->
+    <div class="chat-header">AI股票智能ChatBot</div>
+
+    <!-- 聊天记录区域 -->
+    <div class="chat-messages" id="chatContainer"></div>
+
+    <!-- 输入区域 -->
+    <div class="input-container">
+        <!-- 选择问题类型 -->
+        <select id="typeSelect">
+            <option value="consult">咨询类</option>
+            <option value="predict">预测类</option>
+        </select>
+
+        <!-- 选择股票名称 -->
+        <select id="stockSelect">
+            <option value="">请选择股票</option>
+        </select>
+
+        <!-- 输入问题 -->
+        <input type="text" id="inputMessage" placeholder="请输入你的问题...">
+
+        <!-- 发送按钮 -->
+        <button id="sendButton">发送</button>
+
+        <!-- 清除聊天记录按钮 -->
+        <button class="clear-history-btn" id="clearHistoryButton" style="display: none;">清除历史</button>
+    </div>
+</div>
+
+<script>
+    // 从localStorage中加载聊天记录
+    let chatHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+
+    // 显示聊天记录
+    function displayChatHistory() {
+        const chatContainer = document.getElementById('chatContainer');
+        chatContainer.innerHTML = '';
+        chatHistory.forEach(message => {
+            const messageElement = document.createElement('div');
+            messageElement.className = `chat-message ${message.role}`;
+            messageElement.innerHTML = `<div class="content">${message.content}</div>`;
+            chatContainer.appendChild(messageElement);
+        });
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        // 根据聊天记录是否存在，显示或隐藏清除按钮
+        toggleClearHistoryButton();
+    }
+
+    // 保存聊天记录到localStorage
+    function saveChatHistory() {
+        localStorage.setItem('chatHistory', JSON.stringify(chatHistory));
+    }
+
+    // 清除聊天记录
+    document.getElementById('clearHistoryButton').addEventListener('click', () => {
+        chatHistory = [];
+        displayChatHistory();
+        saveChatHistory();
+    });
+
+    // 根据聊天记录是否存在，显示或隐藏清除按钮
+    function toggleClearHistoryButton() {
+        const clearHistoryButton = document.getElementById('clearHistoryButton');
+        if (chatHistory.length > 0) {
+            clearHistoryButton.style.display = 'inline-block';
+        } else {
+            clearHistoryButton.style.display = 'none';
+        }
+    }
+
+    // 获取所有股票名称并填充到下拉框
+    fetch('http://localhost:8089/stock/getStockNames')
+        .then(response => response.json())
+        .then(data => {
+            const stockSelect = document.getElementById('stockSelect');
+            data.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                stockSelect.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching stock names:', error));
+
+    // 发送消息
+    document.getElementById('sendButton').addEventListener('click', () => {
+        const inputMessage = document.getElementById('inputMessage').value;
+        const typeSelect = document.getElementById('typeSelect').value;
+        const stockSelect = document.getElementById('stockSelect').value;
+
+        if (inputMessage.trim() === '' || stockSelect === '') return;
+
+        // 添加用户消息到聊天记录
+        chatHistory.push({ role: 'user', content: inputMessage });
+        displayChatHistory();
+        saveChatHistory();
+
+        // 清空输入框
+        document.getElementById('inputMessage').value = '';
+
+        // 调用后端接口
+        fetch(`http://localhost:8089/AI/${typeSelect === 'consult' ? 'askAIanswer' : 'predictStockData'}?ask=${encodeURIComponent(inputMessage)}&name=${encodeURIComponent(stockSelect)}`)
+            .then(response => response.text())
+            .then(data => {
+                // 添加AI的回答到聊天记录
+                const aiMessage = { role: 'ai', content: '' };
+                chatHistory.push(aiMessage);
+                displayChatHistory();
+                saveChatHistory();
+
+                const messageElement = document.querySelector('.chat-message.ai:last-child .content');
+                let index = 0;
+                const interval = setInterval(() => {
+                    if (index < data.length) {
+                        messageElement.textContent += data[index];
+                        index++;
+                    } else {
+                        clearInterval(interval);
+                        aiMessage.content = data; // 更新完整的AI回答内容
+                        saveChatHistory();
+                    }
+                }, 50);
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    // 初始化显示聊天记录
+    displayChatHistory();
+</script>
+</body>
+</html>

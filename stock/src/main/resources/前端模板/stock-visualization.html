@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股票可视化展示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .stock-select {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .stock-select label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .stock-select select {
+            padding: 8px 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+        }
+        .chart-card {
+            margin-bottom: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .chart-card-header {
+            padding: 10px 20px;
+            background: #007bff;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .chart-card-body {
+            padding: 20px;
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+        }
+        .stock-info {
+            margin-top: 20px;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+<h2>股票可视化展示</h2>
+<div class="container">
+    <!-- 股票名称下拉框 -->
+    <div class="stock-select">
+        <label for="stockName">选择股票:</label>
+        <select id="stockName">
+            <option value="">请选择股票</option>
+        </select>
+    </div>
+
+    <!-- 条形图 -->
+    <div class="chart-card">
+        <div class="chart-card-header">条形图 - 成交量与成交金额</div>
+        <div class="chart-card-body">
+            <div id="barChart" class="chart-container"></div>
+            <div class="stock-info" id="barInfo"></div>
+        </div>
+    </div>
+
+    <!-- 饼图 -->
+    <div class="chart-card">
+        <div class="chart-card-header">饼图 - 买卖盘比例</div>
+        <div class="chart-card-body">
+            <div id="pieChart" class="chart-container"></div>
+            <div class="stock-info" id="pieInfo"></div>
+        </div>
+    </div>
+
+    <!-- 折线图 -->
+    <div class="chart-card">
+        <div class="chart-card-header">折线图 - 价格走势</div>
+        <div class="chart-card-body">
+            <div id="lineChart" class="chart-container"></div>
+            <div class="stock-info" id="lineInfo"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.2/echarts.min.js"></script>
+<script>
+    // 获取所有股票名称并填充到下拉框
+    fetch('http://localhost:8089/stock/getStockNames')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('stockName');
+            data.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching stock names:', error));
+
+    // 监听下拉框变化，动态加载图表和信息
+    document.getElementById('stockName').addEventListener('change', function () {
+        const selectedName = this.value;
+        if (selectedName) {
+            fetch(`http://localhost:8089/stock/getLatestRecordByName?name=${selectedName}`)
+                .then(response => response.json())
+                .then(data => {
+                    // 更新图表和信息
+                    updateCharts(data);
+                    updateStockInfo(data);
+                })
+                .catch(error => console.error('Error fetching stock data:', error));
+        } else {
+            // 清空图表和信息
+            clearCharts();
+            clearStockInfo();
+        }
+    });
+
+    // 初始化 ECharts 图表
+    const barChart = echarts.init(document.getElementById('barChart'));
+    const pieChart = echarts.init(document.getElementById('pieChart'));
+    const lineChart = echarts.init(document.getElementById('lineChart'));
+
+    // 更新图表
+    function updateCharts(data) {
+        // 条形图 - 成交量与成交金额
+        barChart.setOption({
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: ['成交量', '成交金额']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [data.traNumber, data.traAmount],
+                type: 'bar',
+                itemStyle: {
+                    color: '#5470C6'
+                }
+            }]
+        });
+
+        // 饼图 - 买卖盘比例
+        pieChart.setOption({
+            tooltip: {
+                trigger: 'item'
+            },
+            series: [{
+                name: '买卖盘比例',
+                type: 'pie',
+                radius: '50%',
+                data: [
+                    { value: data.buyFive, name: '买五' },
+                    { value: data.sellFive, name: '卖五' }
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        });
+
+        // 折线图 - 价格走势
+        lineChart.setOption({
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: {
+                type: 'category',
+                data: ['买一', '买二', '买三', '买四', '买五', '卖一', '卖二', '卖三', '卖四', '卖五']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [
+                    data.buyOnePri, data.buyTwoPri, data.buyThreePri, data.buyFourPri, data.buyFivePri,
+                    data.sellOnePri, data.sellTwoPri, data.sellThreePri, data.sellFourPri, data.sellFivePri
+                ],
+                type: 'line',
+                smooth: true,
+                itemStyle: {
+                    color: '#EE6666'
+                }
+            }]
+        });
+    }
+
+    // 更新股票信息
+    function updateStockInfo(data) {
+        document.getElementById('barInfo').innerHTML = `
+            <p><strong>股票名称:</strong> ${data.name}</p>
+            <p><strong>当前价格:</strong> ${data.nowPri}</p>
+            <p><strong>涨跌金额:</strong> ${data.increase}</p>
+            <p><strong>涨跌百分比:</strong> ${data.increPer}%</p>
+        `;
+
+        document.getElementById('pieInfo').innerHTML = `
+            <p><strong>买五数量:</strong> ${data.buyFive}</p>
+            <p><strong>卖五数量:</strong> ${data.sellFive}</p>
+        `;
+
+        document.getElementById('lineInfo').innerHTML = `
+            <p><strong>今日最高价:</strong> ${data.todayMax}</p>
+            <p><strong>今日最低价:</strong> ${data.todayMin}</p>
+            <p><strong>昨日收盘价:</strong> ${data.yestodEndPri}</p>
+        `;
+    }
+
+    // 清空图表
+    function clearCharts() {
+        barChart.clear();
+        pieChart.clear();
+        lineChart.clear();
+    }
+
+    // 清空股票信息
+    function clearStockInfo() {
+        document.getElementById('barInfo').innerHTML = '';
+        document.getElementById('pieInfo').innerHTML = '';
+        document.getElementById('lineInfo').innerHTML = '';
+    }
+</script>
+</body>
+</html>

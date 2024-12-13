@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>所有电费账单</title>
+
+    <!-- Import layui CSS -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/layui/2.5.7/css/layui.css">
+
+    <style>
+        /* Custom CSS for styling */
+        .layui-table th, .layui-table td {
+            text-align: center;
+        }
+
+        .layui-elem-field legend {
+            color: #009688; /* Dark green color for legend */
+        }
+
+        .layui-table th {
+            background-color: #f2f2f2; /* Light gray background for table headers */
+        }
+
+        .layui-table td, .layui-table th {
+            font-size: 16px; /* Font size */
+            padding: 12px; /* Padding for cells */
+        }
+
+        .unpaid {
+            background-color: #ffcccc; /* Light red background for unpaid bills */
+            font-weight: bold; /* Bold text for unpaid bills */
+        }
+    </style>
+</head>
+<body>
+
+<div class="layui-container" style="margin-top: 20px;">
+    <div class="layui-row">
+        <div class="layui-col-md-offset1 layui-col-md10">
+            <fieldset class="layui-elem-field">
+                <legend>所有电费账单</legend>
+                <div class="layui-field-box">
+                    <!-- Search box for username -->
+                    <div class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">用户名：</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" id="usernameInput" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn" id="searchBtn">查询</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>账单ID</th>
+                            <th>用户ID</th>
+                            <th>账单开始日期</th>
+                            <th>账单结束日期</th>
+                            <th>电费金额</th>
+                            <th>费率类型</th>
+                            <th>是否已缴纳</th>
+                            <th>总使用量</th>
+                            <th>用户名</th> <!-- New column for username -->
+                        </tr>
+                        </thead>
+                        <tbody id="billTableBody">
+                        <!-- Bill data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+<!-- Import layui JS -->
+<script src="https://cdn.staticfile.org/layui/2.5.7/layui.js"></script>
+
+<script>
+    // Load data when page is ready
+    layui.use(['jquery', 'layer'], function(){
+        var $ = layui.$;
+
+        // Function to render table rows
+        function renderTable(data) {
+            var html = '';
+            for (var i = 0; i < data.length; i++) {
+                var bill = data[i];
+                var rowClass = bill.paid ? '' : 'unpaid'; // Add 'unpaid' class for unpaid bills
+                html += '<tr class="' + rowClass + '">';
+                html += '<td>' + bill.billId + '</td>';
+                html += '<td>' + bill.userId + '</td>';
+                html += '<td>' + bill.startDate + '</td>';
+                html += '<td>' + bill.endDate + '</td>';
+                html += '<td>' + bill.billAmount + '</td>';
+                html += '<td>' + bill.reteType + '</td>';
+                html += '<td>' + (bill.paid ? '是' : '否') + '</td>';
+                html += '<td>' + bill.totalUsage + '</td>';
+                html += '<td>' + bill.username + '</td>'; // Display username
+                html += '</tr>';
+            }
+            $('#billTableBody').html(html); // Update table body
+        }
+
+        // AJAX call to fetch all electricity bills initially
+        $.ajax({
+            url: 'http://localhost:8080/electricity/bill/all',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data){
+                renderTable(data); // Render table with fetched data
+            },
+            error: function(xhr, status, error){
+                console.error('Failed to fetch data:', error);
+            }
+        });
+
+        // Handle search button click
+        $('#searchBtn').click(function() {
+            var username = $('#usernameInput').val().trim();
+
+            // AJAX call to fetch bills filtered by username
+            $.ajax({
+                url: 'http://localhost:8080/electricity/bill/electricity/bill/search?username=' + username,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data){
+                    renderTable(data); // Render table with fetched data
+                },
+                error: function(xhr, status, error){
+                    console.error('Failed to fetch filtered data:', error);
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

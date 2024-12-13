@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/stock?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: 123456
+
+
+
+xunfei:
+  client:
+    appid: 18829a2c
+    apiSecret: ZGI5NWM3OGM4OWYyMTdkODQxYmY4YTM2
+    apiKey: 441b6877e7bf5068e08f63a0bfc8984e
+
+
+server:
+  port: 8089

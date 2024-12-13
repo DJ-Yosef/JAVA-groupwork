@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px #888;
+            padding: 20px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .change-role-button {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .change-role-button:hover {
+            background-color: #0b7dda;
+        }
+
+        .role-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            z-index: 1000;
+            width: 300px;
+            max-width: 80%;
+        }
+
+        .role-modal label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .role-modal select {
+            width: calc(100% - 16px);
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .role-modal button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .role-modal button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>权限管理</h2>
+
+    <table id="userTable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>用户名</th>
+            <th>角色</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="userTableBody">
+        <!-- User data will be dynamically added here -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Role Change Modal -->
+<div class="role-modal" id="roleChangeModal">
+    <h3>更改权限</h3>
+    <div class="form-group">
+        <label for="roleSelect">选择角色:</label>
+        <select id="roleSelect" name="role" required>
+            <option value="用户">用户</option>
+            <option value="管理员">管理员</option>
+            <option value="不可用">不可用</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <button onclick="changeUserRole()">确定更改</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchAllUsers();
+    });
+
+    function fetchAllUsers() {
+        fetch('http://localhost:8080/users/all')
+            .then(response => response.json())
+            .then(users => {
+                const userTableBody = document.getElementById('userTableBody');
+                users.forEach(user => {
+                    const row = `
+                        <tr>
+                            <td>${user.id}</td>
+                            <td>${user.username}</td>
+                            <td>${user.role}</td>
+                            <td><button class="change-role-button" onclick="openRoleModal(${user.id})">更改权限</button></td>
+                        </tr>
+                    `;
+                    userTableBody.innerHTML += row;
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching users:', error);
+                alert('获取用户信息失败！');
+            });
+    }
+
+    function openRoleModal(userId) {
+        const roleModal = document.getElementById('roleChangeModal');
+        roleModal.style.display = 'block';
+        // Store the userId in a hidden field in the modal
+        document.getElementById('roleChangeModal').dataset.userId = userId;
+    }
+
+    function changeUserRole() {
+        const userId = document.getElementById('roleChangeModal').dataset.userId;
+        const newRole = document.getElementById('roleSelect').value;
+
+        const updatedRole = {
+            id: parseInt(userId),
+            role: newRole
+        };
+
+        fetch('http://localhost:8080/users/updateRole', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedRole),
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.msg);
+                closeRoleModal(); // Close modal after role change
+                window.location.reload(); // Refresh page after role change
+            })
+            .catch((error) => {
+                console.error('Error updating role:', error);
+                alert('更新角色失败！');
+            });
+    }
+
+    function closeRoleModal() {
+        const roleModal = document.getElementById('roleChangeModal');
+        roleModal.style.display = 'none';
+    }
+</script>
+
+</body>
+</html>

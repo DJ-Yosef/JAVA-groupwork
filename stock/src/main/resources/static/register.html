@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>注册页面</title>
+    <link rel="stylesheet" href="//cdn.staticfile.org/layui/2.5.7/css/layui.min.css">
+    <style>
+        /* Existing styles */
+        body {
+            background-image: url('img/img.png');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #464646;
+        }
+
+        .register-box {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 120px;
+        }
+
+        .register-title {
+            text-align: center;
+            font-size: 24px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .register-form-item {
+            margin-bottom: 20px;
+        }
+
+        .register-form-label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .register-input {
+            width: 100%;
+            height: 40px;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 3px;
+            /* Ensure select box displays properly */
+            -webkit-appearance: menulist;
+        }
+
+        .register-btn {
+            width: 100%;
+            height: 40px;
+            background-color: #1e9fff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .register-btn:hover {
+            background-color: #0090ff;
+        }
+
+        .goto-login-btn {
+            width: 100%;
+            height: 40px;
+            background-color: #FF5722; /* Orange color for contrast */
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .goto-login-btn:hover {
+            background-color: #E64A19; /* Darker shade on hover */
+        }
+    </style>
+
+</head>
+<body>
+<div class="register-box">
+    <form class="layui-form" id="registerForm">
+        <div class="register-title">电力收费管理系统 - 注册</div>
+
+        <div class="register-form-item">
+            <label class="register-form-label">用户名</label>
+            <input type="text" name="username" placeholder="请输入用户名" autocomplete="off"
+                   class="layui-input register-input">
+        </div>
+
+        <div class="register-form-item">
+            <label class="register-form-label">密码</label>
+            <input type="password" name="password" placeholder="请输入密码" autocomplete="off"
+                   class="layui-input register-input">
+        </div>
+
+        <div class="register-form-item">
+            <label class="register-form-label">年龄</label>
+            <input type="number" name="age" placeholder="请输入年龄" autocomplete="off"
+                   class="layui-input register-input">
+        </div>
+
+        <div class="register-form-item">
+            <label class="register-form-label">性别</label>
+            <select name="gender" class="register-input">
+                <option value="男">男</option>
+                <option value="女">女</option>
+            </select>
+        </div>
+
+
+        <div class="register-form-item">
+            <label class="register-form-label">联系信息</label>
+            <input type="text" name="contactInfo" placeholder="请输入联系信息" autocomplete="off"
+                   class="layui-input register-input">
+        </div>
+
+        <div class="register-form-item">
+            <label class="register-form-label">地址</label>
+            <input type="text" name="address" placeholder="请输入地址" autocomplete="off"
+                   class="layui-input register-input">
+        </div>
+
+        <div class="register-form-item">
+            <button type="button" class="register-btn" lay-submit lay-filter="register">立即注册</button>
+        </div>
+
+        <div class="register-form-item">
+            <button type="button" class="goto-login-btn" onclick="gotoLogin()">已有账号？去登录</button>
+        </div>
+    </form>
+</div>
+
+<script src="//cdn.staticfile.org/jquery/3.5.1/jquery.min.js"></script>
+<script src="//cdn.staticfile.org/layui/2.5.7/layui.min.js"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form;
+
+        $('#registerForm .register-btn').on('click', function () {
+            var formData = {
+                username: $('input[name="username"]').val(),
+                password: $('input[name="password"]').val(),
+                age: $('input[name="age"]').val(),
+                gender: $('select[name="gender"]').val(),
+                contactInfo: $('input[name="contactInfo"]').val(),
+                address: $('input[name="address"]').val()
+            };
+
+            $.ajax({
+                url: 'http://localhost:8080/users/add',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(formData),
+                success: function (res) {
+                    if (res.code === 200) {
+                        alert('注册成功，请登录');
+                        window.location.href = 'login.html';
+                    } else {
+                        alert('注册失败，请重试');
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log(xhr.responseText);
+                    alert('注册失败，请重试');
+                }
+            });
+        });
+    });
+
+    function gotoLogin() {
+        window.location.href = 'login.html';
+    }
+</script>
+</body>
+</html>

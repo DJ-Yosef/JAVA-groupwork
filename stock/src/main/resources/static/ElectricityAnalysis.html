@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>用户用电分析</title>
+  <!-- 引入 ECharts -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    #chart {
+      width: 80%;
+      height: 500px;
+      margin: 0 auto;
+    }
+    label {
+      font-size: 18px;
+      margin-right: 10px;
+    }
+    select {
+      padding: 8px;
+      font-size: 16px;
+      width: 200px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    h1 {
+      color: #007BFF; /* Beautiful blue color */
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<h1>用户用电分析</h1>
+<div>
+  <label for="username">选择用户名：</label>
+  <select id="username">
+    <!-- 用户名选项会动态添加 -->
+  </select>
+</div>
+<div id="chart"></div>
+
+<script>
+  var chart = echarts.init(document.getElementById('chart'));
+
+  // 页面加载时获取所有用户名，并设置默认选项
+  window.onload = function() {
+    fetch('http://localhost:8080/users/allUsernames')
+            .then(response => response.json())
+            .then(usernames => {
+              var usernameSelect = document.getElementById('username');
+              usernames.forEach(username => {
+                var option = document.createElement('option');
+                option.value = username;
+                option.textContent = username;
+                usernameSelect.appendChild(option);
+              });
+              // 默认选择第一个用户名并渲染图表
+              if (usernames.length > 0) {
+                usernameSelect.value = usernames[0];
+                fetchAndRender(usernames[0]);
+              }
+            })
+            .catch(error => console.error('Error fetching usernames:', error));
+  };
+
+  // 下拉框选项变化时触发查询和渲染
+  document.getElementById('username').addEventListener('change', function() {
+    var selectedUsername = this.value;
+    fetchAndRender(selectedUsername);
+  });
+
+  function fetchAndRender(username) {
+    // 发送请求获取数据
+    fetch('http://localhost:8080/electricity/analysis/usage?username=' + username)
+            .then(response => response.json())
+            .then(data => {
+              renderChart(data);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+  }
+
+  function renderChart(data) {
+    var dates = data.map(item => item.usageDate);
+    var amounts = data.map(item => item.usageAmount);
+
+    var option = {
+      title: {
+        left: 'center',
+        textStyle: {
+          fontSize: 24
+        }
+      },
+      tooltip: {
+        trigger: 'axis'
+      },
+      xAxis: {
+        type: 'category',
+        name: '日期',
+        data: dates
+      },
+      yAxis: {
+        type: 'value',
+        name: '用电量'
+      },
+      series: [{
+        data: amounts,
+        type: 'line',
+        smooth: true
+      }]
+    };
+
+    chart.setOption(option);
+  }
+</script>
+</body>
+</html>

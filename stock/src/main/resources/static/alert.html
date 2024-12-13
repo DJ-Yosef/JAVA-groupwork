@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>异常报警</title>
+    <!-- 引入 ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #chart {
+            width: 90%;
+            max-width: 1200px;
+            height: 500px;
+            margin-top: 20px;
+        }
+        .input-container {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .input-container select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .input-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .warning-text {
+            color: red;
+            font-weight: bold;
+            font-size: 18px;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center; color: #3366cc; font-size: 34px; margin-bottom: 20px;">异常报警</div>
+
+<div class="input-container">
+    <select id="usernameSelect">
+        <!-- 下拉框选项将由 JavaScript 动态生成 -->
+    </select>
+    <button onclick="fetchData()">查询</button>
+</div>
+<div id="chart"></div>
+<div id="warningMessage" class="warning-text"></div>
+
+<script>
+    var chart = echarts.init(document.getElementById('chart'));
+
+    // 页面加载时加载所有用户名并填充下拉框选项，并展示第一个用户的数据
+    window.onload = function() {
+        fetchUsernames();
+    };
+
+    function fetchUsernames() {
+        var select = document.getElementById('usernameSelect');
+        fetch('http://localhost:8080/users/allUsernames')
+            .then(response => response.json())
+            .then(usernames => {
+                // 清空下拉框现有选项
+                select.innerHTML = '';
+                // 创建选项并添加到下拉框中
+                usernames.forEach(username => {
+                    var option = document.createElement('option');
+                    option.value = username;
+                    option.textContent = username;
+                    select.appendChild(option);
+                });
+                // 默认选中第一个选项
+                if (usernames.length > 0) {
+                    select.selectedIndex = 0;
+                    // 在页面加载时就展示第一个用户的图表数据
+                    fetchData();
+                }
+            })
+            .catch(error => console.error('Error fetching usernames:', error));
+    }
+
+    function fetchData() {
+        var username = document.getElementById('usernameSelect').value.trim();
+        var url = 'http://localhost:8080/user/voltage-current/byUsername?username=' + username;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var dates = [];
+                var voltages = [];
+                var currents = [];
+                var warnings = [];
+
+                data.forEach(item => {
+                    dates.push(item.recordTime); // 假设 recordTime 是时间字符串
+                    voltages.push(item.voltage);
+                    currents.push(item.current);
+
+                    // 检查预警条件
+                    if (item.voltage > 300 && item.current > 20) {
+                        warnings.push(`[${item.recordTime}] 电压超过预警值（300V）且电流超过预警值（20A）`);
+                    } else if (item.voltage > 300) {
+                        warnings.push(`[${item.recordTime}] 电压超过预警值（300V）`);
+                    } else if (item.current > 20) {
+                        warnings.push(`[${item.recordTime}] 电流超过预警值（20A）`);
+                    }
+                });
+
+                // 更新图表
+                var option = {
+                    title: {
+                        text: '电力使用预警图表'
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        data: ['电压', '电流']
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: dates
+                    },
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '电压（V）',
+                            position: 'left',
+                            axisLabel: {
+                                formatter: '{value} V'
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#FF5722' // 电压轴线颜色
+                                }
+                            },
+                            splitLine: {
+                                show: false
+                            }
+                        },
+                        {
+                            type: 'value',
+                            name: '电流（A）',
+                            position: 'right',
+                            axisLabel: {
+                                formatter: '{value} A'
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#3E7EFE' // 电流轴线颜色
+                                }
+                            },
+                            splitLine: {
+                                show: false
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '电压',
+                            type: 'line',
+                            data: voltages,
+                            yAxisIndex: 0,
+                            itemStyle: {
+                                normal: {
+                                    color: function(params) {
+                                        if (params.value > 300 && currents[params.dataIndex] > 20) {
+                                            return '#FF0000'; // 电压、电流同时超过预警值的颜色
+                                        } else if (params.value > 300) {
+                                            return '#FF5722'; // 仅电压超过预警值的颜色
+                                        } else {
+                                            return '#3E7EFE'; // 正常颜色
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            name: '电流',
+                            type: 'line',
+                            data: currents,
+                            yAxisIndex: 1,
+                            itemStyle: {
+                                normal: {
+                                    color: function(params) {
+                                        if (params.value > 20 && voltages[params.dataIndex] > 300) {
+                                            return '#FF0000'; // 电流、电压同时超过预警值的颜色
+                                        } else if (params.value > 20) {
+                                            return '#FF5722'; // 仅电流超过预警值的颜色
+                                        } else {
+                                            return '#3E7EFE'; // 正常颜色
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                };
+
+                chart.setOption(option);
+
+                // 显示预警信息
+                var warningMessage = document.getElementById('warningMessage');
+                if (warnings.length > 0) {
+                    warningMessage.innerHTML = '预警信息：<br>' + warnings.join('<br>');
+                } else {
+                    warningMessage.innerHTML = '';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                var warningMessage = document.getElementById('warningMessage');
+                warningMessage.innerHTML = '查询失败，请检查输入的用户名并重试。';
+            });
+    }
+</script>
+</body>
+</html>

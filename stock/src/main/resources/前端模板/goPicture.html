@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股票走势图</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .stock-select {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .stock-select label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .stock-select select {
+            padding: 8px 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+        }
+        .chart-card {
+            margin-bottom: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .chart-card-header {
+            padding: 10px 20px;
+            background: #007bff;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .chart-card-body {
+            padding: 20px;
+            text-align: center;
+        }
+        .chart-card-body img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+<h2>股票走势图</h2>
+<div class="container">
+    <!-- 股票名称下拉框 -->
+    <div class="stock-select">
+        <label for="stockName">选择股票:</label>
+        <select id="stockName">
+            <option value="">请选择股票</option>
+        </select>
+    </div>
+
+
+    <div class="chart-card">
+        <div class="chart-card-header">日K线图</div>
+        <div class="chart-card-body" id="dayUrl"></div>
+    </div>
+    <div class="chart-card">
+        <div class="chart-card-header">周K线图</div>
+        <div class="chart-card-body" id="weekUrl"></div>
+    </div>
+    <div class="chart-card">
+        <div class="chart-card-header">月K线图</div>
+        <div class="chart-card-body" id="monthUrl"></div>
+    </div>
+    <!-- 股票走势图 -->
+    <div class="chart-card">
+        <div class="chart-card-header">分时走势图</div>
+        <div class="chart-card-body" id="minUrl"></div>
+    </div>
+</div>
+
+<script>
+    // 获取所有股票名称并填充到下拉框
+    fetch('http://localhost:8089/stock/getStockNames')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('stockName');
+            data.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching stock names:', error));
+
+    // 监听下拉框变化，动态加载股票走势图
+    document.getElementById('stockName').addEventListener('change', function () {
+        const selectedName = this.value;
+        if (selectedName) {
+            fetch(`http://localhost:8089/stock/getLatestRecordByName?name=${selectedName}`)
+                .then(response => response.json())
+                .then(data => {
+                    // 显示图片
+                    document.getElementById('minUrl').innerHTML = `<img src="${data.minurl}" alt="分时走势图">`;
+                    document.getElementById('dayUrl').innerHTML = `<img src="${data.dayurl}" alt="日K线图">`;
+                    document.getElementById('weekUrl').innerHTML = `<img src="${data.weekurl}" alt="周K线图">`;
+                    document.getElementById('monthUrl').innerHTML = `<img src="${data.monthurl}" alt="月K线图">`;
+                })
+                .catch(error => console.error('Error fetching stock data:', error));
+        } else {
+            // 清空图片
+            document.getElementById('minUrl').innerHTML = '';
+            document.getElementById('dayUrl').innerHTML = '';
+            document.getElementById('weekUrl').innerHTML = '';
+            document.getElementById('monthUrl').innerHTML = '';
+        }
+    });
+</script>
+</body>
+</html>

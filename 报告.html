@@ -1,0 +1,679 @@
+<!DOCTYPE html><html><head>
+      <title>报告</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:///c:\Users\awsld\.vscode\extensions\shd101wyy.markdown-preview-enhanced-0.8.15\crossnote\dependencies\katex\katex.min.css">
+      
+      
+      
+      
+      
+      <style>
+      code[class*=language-],pre[class*=language-]{color:#333;background:0 0;font-family:Consolas,"Liberation Mono",Menlo,Courier,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.4;-moz-tab-size:8;-o-tab-size:8;tab-size:8;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:.8em;overflow:auto;border-radius:3px;background:#f5f5f5}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal;background:#f5f5f5}.token.blockquote,.token.comment{color:#969896}.token.cdata{color:#183691}.token.doctype,.token.macro.property,.token.punctuation,.token.variable{color:#333}.token.builtin,.token.important,.token.keyword,.token.operator,.token.rule{color:#a71d5d}.token.attr-value,.token.regex,.token.string,.token.url{color:#183691}.token.atrule,.token.boolean,.token.code,.token.command,.token.constant,.token.entity,.token.number,.token.property,.token.symbol{color:#0086b3}.token.prolog,.token.selector,.token.tag{color:#63a35c}.token.attr-name,.token.class,.token.class-name,.token.function,.token.id,.token.namespace,.token.pseudo-class,.token.pseudo-element,.token.url-reference .token.variable{color:#795da3}.token.entity{cursor:help}.token.title,.token.title .token.punctuation{font-weight:700;color:#1d3e81}.token.list{color:#ed6a43}.token.inserted{background-color:#eaffea;color:#55a532}.token.deleted{background-color:#ffecec;color:#bd2c00}.token.bold{font-weight:700}.token.italic{font-style:italic}.language-json .token.property{color:#183691}.language-markup .token.tag .token.punctuation{color:#333}.language-css .token.function,code.language-css{color:#0086b3}.language-yaml .token.atrule{color:#63a35c}code.language-yaml{color:#183691}.language-ruby .token.function{color:#333}.language-markdown .token.url{color:#795da3}.language-makefile .token.symbol{color:#795da3}.language-makefile .token.variable{color:#183691}.language-makefile .token.builtin{color:#0086b3}.language-bash .token.keyword{color:#0086b3}pre[data-line]{position:relative;padding:1em 0 1em 3em}pre[data-line] .line-highlight-wrapper{position:absolute;top:0;left:0;background-color:transparent;display:block;width:100%}pre[data-line] .line-highlight{position:absolute;left:0;right:0;padding:inherit 0;margin-top:1em;background:hsla(24,20%,50%,.08);background:linear-gradient(to right,hsla(24,20%,50%,.1) 70%,hsla(24,20%,50%,0));pointer-events:none;line-height:inherit;white-space:pre}pre[data-line] .line-highlight:before,pre[data-line] .line-highlight[data-end]:after{content:attr(data-start);position:absolute;top:.4em;left:.6em;min-width:1em;padding:0 .5em;background-color:hsla(24,20%,50%,.4);color:#f4f1ef;font:bold 65%/1.5 sans-serif;text-align:center;vertical-align:.3em;border-radius:999px;text-shadow:none;box-shadow:0 1px #fff}pre[data-line] .line-highlight[data-end]:after{content:attr(data-end);top:auto;bottom:.4em}html body{font-family:'Helvetica Neue',Helvetica,'Segoe UI',Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ol,html body>ul{margin-bottom:16px}html body ol,html body ul{padding-left:2em}html body ol.no-list,html body ul.no-list{padding:0;list-style-type:none}html body ol ol,html body ol ul,html body ul ol,html body ul ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:700;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::after,html body code::before{letter-spacing:-.2em;content:'\00a0'}html body pre>code{padding:0;margin:0;word-break:normal;white-space:pre;background:0 0;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:after,html body pre code:before,html body pre tt:after,html body pre tt:before{content:normal}html body blockquote,html body dl,html body ol,html body p,html body pre,html body ul{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body code,html body pre{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview ul{list-style:disc}.markdown-preview ul ul{list-style:circle}.markdown-preview ul ul ul{list-style:square}.markdown-preview ol{list-style:decimal}.markdown-preview ol ol,.markdown-preview ul ol{list-style-type:lower-roman}.markdown-preview ol ol ol,.markdown-preview ol ul ol,.markdown-preview ul ol ol,.markdown-preview ul ul ol{list-style-type:lower-alpha}.markdown-preview .newpage,.markdown-preview .pagebreak{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center!important}.markdown-preview:not([data-for=preview]) .code-chunk .code-chunk-btn-group{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .status{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .output-div{margin-bottom:16px}.markdown-preview .md-toc{padding:0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link div,.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}.markdown-preview .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0;min-height:100vh}@media screen and (min-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{font-size:14px!important;padding:1em}}@media print{html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc{padding:0 16px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link div,html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% - 300px);padding:2em calc(50% - 457px - 300px / 2);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+      <!-- The content below will be included at the end of the <head> element. --><script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    // your code here
+  });
+</script></head><body for="html-export">
+    
+    
+      <div class="crossnote markdown-preview  ">
+      
+<h1 id="ai-agent调用小模型预测股票收益率进度汇报"><strong>AI Agent调用小模型预测股票收益率——进度汇报</strong> </h1>
+<h2 id="1-系统总体框架"><strong>1. 系统总体框架</strong> </h2>
+<h3 id="业务目标"><strong>业务目标</strong> </h3>
+<p>我们致力于开发一个基于深度学习和Java Web的股票收益率预测系统，满足以下业务目标：</p>
+<ol>
+<li><strong>数据采集与处理</strong>：
+<ul>
+<li>采集多支股票的历史量价数据。</li>
+<li>使用深度学习模型预测指定股票未来3天的收益率。</li>
+</ul>
+</li>
+<li><strong>数据库构建与更新</strong>：
+<ul>
+<li>利用Tushare或Ricequant等数据源，构建一个实时更新的股票量价信息数据库。</li>
+</ul>
+</li>
+<li><strong>用户交互</strong>：
+<ul>
+<li>构建B/S模式信息系统。</li>
+<li>用户通过指令与大模型交互，完成数据查询、预测等任务。</li>
+<li>垂直领域任务（如收益率预测）由本地模型完成，结果通过前端反馈给用户。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="系统模块划分及交互"><strong>系统模块划分及交互</strong> </h3>
+<h4 id="1-前端"><strong>1. 前端</strong> </h4>
+<ul>
+<li><strong>页面设计</strong>：
+<ul>
+<li>使用课程提供的模板设计用户界面，确保系统美观、易用。</li>
+<li>提供动态交互功能，例如数据可视化、任务指令输入框。</li>
+</ul>
+</li>
+<li><strong>大模型API和Agent接入</strong>：
+<ul>
+<li>与OpenAI、通义千问等大模型API集成，解析用户指令。</li>
+<li>动态调用本地深度学习模型完成垂直任务。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-中端"><strong>2. 中端</strong> </h4>
+<ul>
+<li><strong>服务逻辑</strong>：
+<ul>
+<li>使用Spring Boot框架搭建服务端。</li>
+<li>负责任务分发，包括解析用户指令、调用数据库或本地模型。</li>
+<li>实现RESTful API，为前端提供统一的接口支持。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-后端"><strong>3. 后端</strong> </h4>
+<ul>
+<li><strong>数据库</strong>：
+<ul>
+<li>数据源：使用Tushare采集10支高校持股的股票交易数据。</li>
+<li>构建MySQL数据库，存储历史量价数据和实时更新信息。</li>
+<li>提供查询接口，支持大模型任务和用户查询。</li>
+</ul>
+</li>
+<li><strong>Agent模型</strong>：
+<ul>
+<li>模型选择：计划使用Transformer或LSTM建模，因其适合处理时间序列特征。</li>
+<li>数据：基于采集的历史交易数据进行模型训练和微调。</li>
+<li>功能：支持收益率预测任务，作为系统的垂直领域工具。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="2-当前进展汇报"><strong>2. 当前进展汇报</strong> </h2>
+<h3 id="已完成的任务"><strong>已完成的任务</strong> </h3>
+<h4 id="1-系统设计">1. <strong>系统设计</strong>： </h4>
+<ul>
+<li>完成系统模块划分，明确前中后端的功能与交互方式。</li>
+<li>选定技术栈，包括Spring Boot框架、MySQL、深度学习框架（PyTorch/TensorFlow）和大模型API。</li>
+</ul>
+<pre class="language-text">Spring Boot 项目分为以下层次：
+</pre>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Controller</td>
+<td>接收用户请求，调用 Service 层，返回结果。</td>
+</tr>
+<tr>
+<td>Service</td>
+<td>负责业务逻辑，包括调用大语言模型、股票数据接口、深度学习模型和数据库。</td>
+</tr>
+<tr>
+<td>Repository</td>
+<td>负责与数据库交互，包括查询和更新股票数据。</td>
+</tr>
+<tr>
+<td>Model</td>
+<td>定义数据结构，包括用户请求、股票数据、预测结果等。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>详细设计</strong><br>
+参看流程图及以下文字说明。</p>
+<ol>
+<li>Controller 层</li>
+</ol>
+<ul>
+<li>功能：<br>
+接收用户请求并将其转发给 Service 层。<br>
+返回结果（如预测结果和分析报告）。</li>
+<li>接口设计：<br>
+接口名称：POST /api/analysis<br>
+参数：JSON 格式的用户问题，例如：</li>
+</ul>
+<pre data-role="codeBlock" data-info="json" class="language-json json"><code><span class="token punctuation">{</span>
+  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token string">"基于最近一年某上市企业的股价分析未来三个月的股价变动情况"</span>
+<span class="token punctuation">}</span>
+返回值：JSON 格式预测结果和分析报告，例如： 
+<span class="token punctuation">{</span>
+  <span class="token property">"company"</span><span class="token operator">:</span> <span class="token string">"某上市企业"</span><span class="token punctuation">,</span>
+  <span class="token property">"prediction"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token number">120.5</span><span class="token punctuation">,</span> <span class="token number">121.3</span><span class="token punctuation">,</span> <span class="token number">123.8</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"analysis"</span><span class="token operator">:</span> <span class="token string">"未来三个月的股价预计呈缓慢上升趋势。"</span>
+<span class="token punctuation">}</span>
+</code></pre><p>示例代码：</p>
+<pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/api"</span><span class="token punctuation">)</span>
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">CommandController</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword keyword-private">private</span> <span class="token class-name">AnalysisService</span> analysisService<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@PostMapping</span><span class="token punctuation">(</span><span class="token string">"/analysis"</span><span class="token punctuation">)</span>
+    <span class="token keyword keyword-public">public</span> <span class="token class-name">ResponseEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">&gt;</span></span> <span class="token function">analyze</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestBody</span> <span class="token class-name">CommandRequest</span> command<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">PredictionResult</span> result <span class="token operator">=</span> analysisService<span class="token punctuation">.</span><span class="token function">processCommand</span><span class="token punctuation">(</span>command<span class="token punctuation">.</span><span class="token function">getQuery</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-return">return</span> <span class="token class-name">ResponseEntity</span><span class="token punctuation">.</span><span class="token function">ok</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><ol start="2">
+<li>Service 层</li>
+</ol>
+<ul>
+<li>功能：<br>
+解析用户请求：调用大语言模型提取企业名称、时间范围等。<br>
+调用股票数据接口更新数据库。<br>
+调用深度学习模型预测股票走势。<br>
+整合预测结果，生成分析报告。</li>
+<li>涉及接口：<br>
+大语言模型接口：<br>
+接口名称：POST /api/analyze-query<br>
+参数：问题文本<br>
+返回值：提取的关键信息（企业名称、时间范围等）。<br>
+股票数据接口：<br>
+接口名称：第三方平台 API，如 GET /stock/{symbol}<br>
+参数：企业代码、时间范围。<br>
+返回值：股票历史数据。<br>
+深度学习模型接口：<br>
+接口名称：POST /model/predict<br>
+参数：JSON 格式股票数据。<br>
+返回值：预测结果。<br>
+示例代码：</li>
+</ul>
+<pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token annotation punctuation">@Service</span>
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">AnalysisService</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword keyword-private">private</span> <span class="token class-name">DatabaseService</span> databaseService<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword keyword-private">private</span> <span class="token class-name">AIModelService</span> aiModelService<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword keyword-private">private</span> <span class="token class-name">LLMService</span> llmService<span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token class-name">PredictionResult</span> <span class="token function">processCommand</span><span class="token punctuation">(</span><span class="token class-name">String</span> query<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// 调用大语言模型接口解析问题</span>
+        <span class="token class-name">CommandInfo</span> info <span class="token operator">=</span> llmService<span class="token punctuation">.</span><span class="token function">parseQuery</span><span class="token punctuation">(</span>query<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 检查数据库，若缺失数据则调用股票数据接口更新</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">StockData</span><span class="token punctuation">&gt;</span></span> data <span class="token operator">=</span> databaseService<span class="token punctuation">.</span><span class="token function">getStockData</span><span class="token punctuation">(</span>info<span class="token punctuation">.</span><span class="token function">getCompany</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> info<span class="token punctuation">.</span><span class="token function">getTimeRange</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>data<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            data <span class="token operator">=</span> databaseService<span class="token punctuation">.</span><span class="token function">updateStockData</span><span class="token punctuation">(</span>info<span class="token punctuation">.</span><span class="token function">getCompany</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> info<span class="token punctuation">.</span><span class="token function">getTimeRange</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment">// 调用深度学习模型预测</span>
+        <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Double</span><span class="token punctuation">&gt;</span></span> prediction <span class="token operator">=</span> aiModelService<span class="token punctuation">.</span><span class="token function">predict</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 整理结果并返回</span>
+        <span class="token keyword keyword-return">return</span> <span class="token keyword keyword-new">new</span> <span class="token class-name">PredictionResult</span><span class="token punctuation">(</span>info<span class="token punctuation">.</span><span class="token function">getCompany</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> prediction<span class="token punctuation">,</span> <span class="token string">"未来三个月股价有上升趋势。"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><ol start="3">
+<li>Repository 层</li>
+</ol>
+<ul>
+<li>功能：<br>
+提供对数据库的操作，包括查询和插入。</li>
+<li>涉及接口：<br>
+查询接口：根据企业名称和时间范围查询数据。<br>
+插入接口：插入新获取的股票数据。<br>
+示例代码：</li>
+</ul>
+<pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token annotation punctuation">@Repository</span>
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-interface">interface</span> <span class="token class-name">StockDataRepository</span> <span class="token keyword keyword-extends">extends</span> <span class="token class-name">JpaRepository</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">StockData</span><span class="token punctuation">,</span> <span class="token class-name">Long</span><span class="token punctuation">&gt;</span></span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Query</span><span class="token punctuation">(</span><span class="token string">"SELECT s FROM StockData s WHERE s.company = :company AND s.date BETWEEN :startDate AND :endDate"</span><span class="token punctuation">)</span>
+    <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">StockData</span><span class="token punctuation">&gt;</span></span> <span class="token function">findStockData</span><span class="token punctuation">(</span>
+        <span class="token annotation punctuation">@Param</span><span class="token punctuation">(</span><span class="token string">"company"</span><span class="token punctuation">)</span> <span class="token class-name">String</span> company<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@Param</span><span class="token punctuation">(</span><span class="token string">"startDate"</span><span class="token punctuation">)</span> <span class="token class-name">LocalDate</span> startDate<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@Param</span><span class="token punctuation">(</span><span class="token string">"endDate"</span><span class="token punctuation">)</span> <span class="token class-name">LocalDate</span> endDate
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><ol start="4">
+<li>数据模型<br>
+涉及数据结构：</li>
+</ol>
+<pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token comment">// 用户请求数据模型（CommandRequest）：</span>
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">CommandRequest</span> <span class="token punctuation">{</span>
+    <span class="token keyword keyword-private">private</span> <span class="token class-name">String</span> query<span class="token punctuation">;</span>
+    <span class="token comment">// Getter &amp; Setter</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// 股票数据模型（StockData）：</span>
+<span class="token annotation punctuation">@Entity</span>
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">StockData</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Id</span>
+    <span class="token annotation punctuation">@GeneratedValue</span><span class="token punctuation">(</span>strategy <span class="token operator">=</span> <span class="token class-name">GenerationType</span><span class="token punctuation">.</span><span class="token constant">IDENTITY</span><span class="token punctuation">)</span>
+    <span class="token keyword keyword-private">private</span> <span class="token class-name">Long</span> id<span class="token punctuation">;</span>
+    <span class="token keyword keyword-private">private</span> <span class="token class-name">String</span> company<span class="token punctuation">;</span>
+    <span class="token keyword keyword-private">private</span> <span class="token class-name">LocalDate</span> date<span class="token punctuation">;</span>
+    <span class="token keyword keyword-private">private</span> <span class="token keyword keyword-double">double</span> price<span class="token punctuation">;</span>
+    <span class="token comment">// Getter &amp; Setter</span>
+<span class="token punctuation">}</span>
+<span class="token comment">// 预测结果数据模型（PredictionResult）：</span>
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">PredictionResult</span> <span class="token punctuation">{</span>
+    <span class="token keyword keyword-private">private</span> <span class="token class-name">String</span> company<span class="token punctuation">;</span>
+    <span class="token keyword keyword-private">private</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Double</span><span class="token punctuation">&gt;</span></span> prediction<span class="token punctuation">;</span>
+    <span class="token keyword keyword-private">private</span> <span class="token class-name">String</span> analysis<span class="token punctuation">;</span>
+    <span class="token comment">// Constructor, Getter &amp; Setter</span>
+<span class="token punctuation">}</span>
+</code></pre><ol start="5">
+<li>层间对接设计<br>
+Controller → Service：<br>
+调用 processCommand 方法，传递用户请求内容。<br>
+Service → Repository：<br>
+通过 StockDataRepository 查询和更新数据库。<br>
+Service → 大语言模型接口：<br>
+使用 HTTP 客户端调用大语言模型接口。<br>
+Service → 股票数据接口：<br>
+使用 HTTP 客户端调用第三方平台 API，获取股票数据。<br>
+Service → 深度学习模型接口：<br>
+使用 HTTP 客户端将数据发送至 Python 模型服务。</li>
+</ol>
+<h4 id="2-数据采集与处理">2. <strong>数据采集与处理</strong>： </h4>
+<ul>
+<li>已采集10支高校持股的股票过去一年的历史量价数据。</li>
+<li>初步完成数据预处理，包括缺失值填充、特征工程（如移动平均线、收益率计算）。</li>
+</ul>
+<p><strong>一、调用股票数据源 API</strong></p>
+<ol>
+<li>
+<p>股票数据源 Python API 背景<br>
+提供者的接口是基于 Python 开发的，通常通过 HTTP 提供 RESTful API 服务。我们需要在 Python 中运行一个服务，例如使用 Flask 或 FastAPI 搭建 API。</p>
+</li>
+<li>
+<p>Python 端接口实现（示例）<br>
+以下示例展示了如何用 Python 的 Flask 提供股票数据接口：</p>
+<pre data-role="codeBlock" data-info="py" class="language-python py"><code><span class="token keyword keyword-from">from</span> flask <span class="token keyword keyword-import">import</span> Flask<span class="token punctuation">,</span> request<span class="token punctuation">,</span> jsonify
+<span class="token keyword keyword-import">import</span> yfinance <span class="token keyword keyword-as">as</span> yf  <span class="token comment"># 示例：通过 yfinance 获取股票数据</span>
+
+app <span class="token operator">=</span> Flask<span class="token punctuation">(</span>__name__<span class="token punctuation">)</span>
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/api/stock'</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword keyword-def">def</span> <span class="token function">get_stock_data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    symbol <span class="token operator">=</span> request<span class="token punctuation">.</span>args<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'symbol'</span><span class="token punctuation">)</span>  <span class="token comment"># 企业代码</span>
+    start_date <span class="token operator">=</span> request<span class="token punctuation">.</span>args<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'start_date'</span><span class="token punctuation">)</span>  <span class="token comment"># 起始日期</span>
+    end_date <span class="token operator">=</span> request<span class="token punctuation">.</span>args<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'end_date'</span><span class="token punctuation">)</span>  <span class="token comment"># 结束日期</span>
+
+    <span class="token keyword keyword-if">if</span> <span class="token keyword keyword-not">not</span> symbol <span class="token keyword keyword-or">or</span> <span class="token keyword keyword-not">not</span> start_date <span class="token keyword keyword-or">or</span> <span class="token keyword keyword-not">not</span> end_date<span class="token punctuation">:</span>
+        <span class="token keyword keyword-return">return</span> jsonify<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"error"</span><span class="token punctuation">:</span> <span class="token string">"Missing parameters"</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">400</span>
+
+    <span class="token comment"># 获取股票数据</span>
+    data <span class="token operator">=</span> yf<span class="token punctuation">.</span>download<span class="token punctuation">(</span>symbol<span class="token punctuation">,</span> start<span class="token operator">=</span>start_date<span class="token punctuation">,</span> end<span class="token operator">=</span>end_date<span class="token punctuation">)</span>
+    <span class="token keyword keyword-if">if</span> data<span class="token punctuation">.</span>empty<span class="token punctuation">:</span>
+        <span class="token keyword keyword-return">return</span> jsonify<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"error"</span><span class="token punctuation">:</span> <span class="token string">"No data found"</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">404</span>
+
+    result <span class="token operator">=</span> data<span class="token punctuation">.</span>reset_index<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>to_dict<span class="token punctuation">(</span>orient<span class="token operator">=</span><span class="token string">'records'</span><span class="token punctuation">)</span>
+    <span class="token keyword keyword-return">return</span> jsonify<span class="token punctuation">(</span>result<span class="token punctuation">)</span>
+
+<span class="token keyword keyword-if">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    app<span class="token punctuation">.</span>run<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">'0.0.0.0'</span><span class="token punctuation">,</span> port<span class="token operator">=</span><span class="token number">5000</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li>
+<p>Spring Boot 调用 Python API<br>
+3.1 使用 RestTemplate 或 WebClient<br>
+示例代码（使用 RestTemplate 调用）：</p>
+<pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token annotation punctuation">@Service</span>
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">StockDataService</span> <span class="token punctuation">{</span>
+    <span class="token keyword keyword-private">private</span> <span class="token keyword keyword-static">static</span> <span class="token keyword keyword-final">final</span> <span class="token class-name">String</span> <span class="token constant">STOCK_API_URL</span> <span class="token operator">=</span> <span class="token string">"http://localhost:5000/api/stock"</span><span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Map</span><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span><span class="token punctuation">&gt;</span></span> <span class="token function">fetchStockData</span><span class="token punctuation">(</span><span class="token class-name">String</span> symbol<span class="token punctuation">,</span> <span class="token class-name">String</span> startDate<span class="token punctuation">,</span> <span class="token class-name">String</span> endDate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">RestTemplate</span> restTemplate <span class="token operator">=</span> <span class="token keyword keyword-new">new</span> <span class="token class-name">RestTemplate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">String</span> url <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"%s?symbol=%s&amp;start_date=%s&amp;end_date=%s"</span><span class="token punctuation">,</span>
+                <span class="token constant">STOCK_API_URL</span><span class="token punctuation">,</span> symbol<span class="token punctuation">,</span> startDate<span class="token punctuation">,</span> endDate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-try">try</span> <span class="token punctuation">{</span>
+            <span class="token class-name">ResponseEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">List</span><span class="token punctuation">&gt;</span></span> response <span class="token operator">=</span> restTemplate<span class="token punctuation">.</span><span class="token function">getForEntity</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> <span class="token class-name">List</span><span class="token punctuation">.</span><span class="token keyword keyword-class">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword keyword-return">return</span> response<span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword keyword-catch">catch</span> <span class="token punctuation">(</span><span class="token class-name">HttpClientErrorException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword keyword-throw">throw</span> <span class="token keyword keyword-new">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"Error fetching stock data: "</span> <span class="token operator">+</span> e<span class="token punctuation">.</span><span class="token function">getResponseBodyAsString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></li>
+</ol>
+<p>3.2 说明<br>
+依赖库：Spring 提供了 RestTemplate 和 WebClient 供我们与外部 API 通信。需要在 pom.xml 中添加：</p>
+<pre data-role="codeBlock" data-info="xml" class="language-xml xml"><code><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">&gt;</span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">&gt;</span></span>spring-boot-starter-web<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">&gt;</span></span>
+</code></pre><p>接口路径：根据 Python 服务的地址调整 STOCK_API_URL。</p>
+<p><strong>二、调用 Python 深度学习模型</strong></p>
+<ol>
+<li>
+<p>深度学习模型接口背景<br>
+模型服务由 Python 提供，通过 Flask 或 FastAPI 等框架暴露 HTTP API。</p>
+</li>
+<li>
+<p>Python 端接口实现<br>
+以下代码演示一个接受数据并返回预测结果的接口：</p>
+<pre data-role="codeBlock" data-info="py" class="language-python py"><code>  <span class="token keyword keyword-from">from</span> flask <span class="token keyword keyword-import">import</span> Flask<span class="token punctuation">,</span> request<span class="token punctuation">,</span> jsonify
+  <span class="token keyword keyword-import">import</span> numpy <span class="token keyword keyword-as">as</span> np
+  <span class="token keyword keyword-import">import</span> tensorflow <span class="token keyword keyword-as">as</span> tf
+
+  app <span class="token operator">=</span> Flask<span class="token punctuation">(</span>__name__<span class="token punctuation">)</span>
+
+  <span class="token comment"># 加载预训练模型</span>
+  model <span class="token operator">=</span> tf<span class="token punctuation">.</span>keras<span class="token punctuation">.</span>models<span class="token punctuation">.</span>load_model<span class="token punctuation">(</span><span class="token string">'stock_prediction_model.h5'</span><span class="token punctuation">)</span>
+
+  <span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/api/predict'</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'POST'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token keyword keyword-def">def</span> <span class="token function">predict</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+      data <span class="token operator">=</span> request<span class="token punctuation">.</span>json<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'data'</span><span class="token punctuation">)</span>  <span class="token comment"># 获取输入数据</span>
+      <span class="token keyword keyword-if">if</span> <span class="token keyword keyword-not">not</span> data<span class="token punctuation">:</span>
+          <span class="token keyword keyword-return">return</span> jsonify<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"error"</span><span class="token punctuation">:</span> <span class="token string">"No input data"</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">400</span>
+
+      <span class="token comment"># 转换数据格式并预测</span>
+      input_data <span class="token operator">=</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">.</span>reshape<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 示例：输入为二维数组</span>
+      prediction <span class="token operator">=</span> model<span class="token punctuation">.</span>predict<span class="token punctuation">(</span>input_data<span class="token punctuation">)</span><span class="token punctuation">.</span>tolist<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+      <span class="token keyword keyword-return">return</span> jsonify<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"prediction"</span><span class="token punctuation">:</span> prediction<span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+  <span class="token keyword keyword-if">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+      app<span class="token punctuation">.</span>run<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">'0.0.0.0'</span><span class="token punctuation">,</span> port<span class="token operator">=</span><span class="token number">6000</span><span class="token punctuation">)</span>
+</code></pre></li>
+<li>
+<p>Spring Boot 调用 Python 模型接口<br>
+3.1 使用 RestTemplate 或 WebClient<br>
+示例代码：</p>
+<pre data-role="codeBlock" data-info="java" class="language-java java"><code><span class="token annotation punctuation">@Service</span>
+<span class="token keyword keyword-public">public</span> <span class="token keyword keyword-class">class</span> <span class="token class-name">AIModelService</span> <span class="token punctuation">{</span>
+    <span class="token keyword keyword-private">private</span> <span class="token keyword keyword-static">static</span> <span class="token keyword keyword-final">final</span> <span class="token class-name">String</span> <span class="token constant">MODEL_API_URL</span> <span class="token operator">=</span> <span class="token string">"http://localhost:6000/api/predict"</span><span class="token punctuation">;</span>
+
+    <span class="token keyword keyword-public">public</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Double</span><span class="token punctuation">&gt;</span></span> <span class="token function">predictStockTrend</span><span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Double</span><span class="token punctuation">&gt;</span></span> inputData<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token class-name">RestTemplate</span> restTemplate <span class="token operator">=</span> <span class="token keyword keyword-new">new</span> <span class="token class-name">RestTemplate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// 构造请求数据</span>
+        <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> request <span class="token operator">=</span> <span class="token keyword keyword-new">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        request<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"data"</span><span class="token punctuation">,</span> inputData<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword keyword-try">try</span> <span class="token punctuation">{</span>
+            <span class="token comment">// 发送 POST 请求</span>
+            <span class="token class-name">ResponseEntity</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Map</span><span class="token punctuation">&gt;</span></span> response <span class="token operator">=</span> restTemplate<span class="token punctuation">.</span><span class="token function">postForEntity</span><span class="token punctuation">(</span><span class="token constant">MODEL_API_URL</span><span class="token punctuation">,</span> request<span class="token punctuation">,</span> <span class="token class-name">Map</span><span class="token punctuation">.</span><span class="token keyword keyword-class">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">&gt;</span></span> responseBody <span class="token operator">=</span> response<span class="token punctuation">.</span><span class="token function">getBody</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword keyword-if">if</span> <span class="token punctuation">(</span>responseBody<span class="token punctuation">.</span><span class="token function">containsKey</span><span class="token punctuation">(</span><span class="token string">"prediction"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword keyword-return">return</span> <span class="token punctuation">(</span><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Double</span><span class="token punctuation">&gt;</span></span><span class="token punctuation">)</span> responseBody<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"prediction"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword keyword-else">else</span> <span class="token punctuation">{</span>
+                <span class="token keyword keyword-throw">throw</span> <span class="token keyword keyword-new">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"Prediction error: "</span> <span class="token operator">+</span> responseBody<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span> <span class="token keyword keyword-catch">catch</span> <span class="token punctuation">(</span><span class="token class-name">HttpClientErrorException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword keyword-throw">throw</span> <span class="token keyword keyword-new">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"Error calling prediction API: "</span> <span class="token operator">+</span> e<span class="token punctuation">.</span><span class="token function">getResponseBodyAsString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></li>
+</ol>
+<h4 id="3-模型选择与初步实验">3. <strong>模型选择与初步实验</strong>： </h4>
+<ul>
+<li>已实现LSTM模型的初步训练代码，验证了其在样本数据上的表现。</li>
+<li>探索了Transformer模型在时间序列数据上的应用，实验结果表明其具备较强的特征捕捉能力。<pre data-role="codeBlock" data-info="python" class="language-python python"><code><span class="token comment"># !pip install tushare</span>
+<span class="token keyword keyword-import">import</span> tushare <span class="token keyword keyword-as">as</span> ts
+<span class="token keyword keyword-import">import</span> numpy <span class="token keyword keyword-as">as</span> np
+<span class="token keyword keyword-import">import</span> pandas <span class="token keyword keyword-as">as</span> pd
+<span class="token keyword keyword-import">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword keyword-as">as</span> plt
+
+<span class="token comment"># 设置token</span>
+ts<span class="token punctuation">.</span>set_token<span class="token punctuation">(</span><span class="token string">'c1977fccb6b193794feab07a8f6fbf03ca8e2a297613fa486d7fe9be'</span><span class="token punctuation">)</span>
+pro <span class="token operator">=</span> ts<span class="token punctuation">.</span>pro_api<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment"># 获取股票列表</span>
+df <span class="token operator">=</span> pro<span class="token punctuation">.</span>stock_basic<span class="token punctuation">(</span>exchange<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">,</span> list_status<span class="token operator">=</span><span class="token string">'L'</span><span class="token punctuation">,</span> fields<span class="token operator">=</span><span class="token string">'ts_code,symbol,name,area,industry,list_date'</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 获取股票日线数据</span>
+df <span class="token operator">=</span> pro<span class="token punctuation">.</span>daily<span class="token punctuation">(</span>ts_code<span class="token operator">=</span><span class="token string">'600000.SH'</span><span class="token punctuation">,</span> start_date<span class="token operator">=</span><span class="token string">'20200101'</span><span class="token punctuation">,</span> end_date<span class="token operator">=</span><span class="token string">'20201231'</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 获取股票分钟线数据</span>
+df <span class="token operator">=</span> pro<span class="token punctuation">.</span>minute<span class="token punctuation">(</span>ts_code<span class="token operator">=</span><span class="token string">'600000.SH'</span><span class="token punctuation">,</span> start_date<span class="token operator">=</span><span class="token string">'20200101'</span><span class="token punctuation">,</span> end_date<span class="token operator">=</span><span class="token string">'20201231'</span><span class="token punctuation">,</span> freq<span class="token operator">=</span><span class="token string">'1min'</span><span class="token punctuation">)</span>
+<span class="token comment"># 获取上证指数数据</span>
+df <span class="token operator">=</span> ts<span class="token punctuation">.</span>get_index<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword keyword-print">print</span><span class="token punctuation">(</span>df<span class="token punctuation">.</span>head<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 获取上证指数历史行情数据</span>
+df <span class="token operator">=</span> ts<span class="token punctuation">.</span>get_hist_data<span class="token punctuation">(</span><span class="token string">'000001'</span><span class="token punctuation">,</span> start<span class="token operator">=</span><span class="token string">'2018-01-01'</span><span class="token punctuation">,</span> end<span class="token operator">=</span><span class="token string">'2018-07-01'</span><span class="token punctuation">)</span>
+<span class="token keyword keyword-print">print</span><span class="token punctuation">(</span>df<span class="token punctuation">.</span>head<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 绘制上证指数历史行情数据</span>
+df<span class="token punctuation">[</span><span class="token string">'close'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>plot<span class="token punctuation">(</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+LSTM模型
+<span class="token keyword keyword-import">import</span> numpy <span class="token keyword keyword-as">as</span> np
+<span class="token keyword keyword-import">import</span> pandas <span class="token keyword keyword-as">as</span> pd
+<span class="token keyword keyword-import">import</span> torch
+<span class="token keyword keyword-import">import</span> torch<span class="token punctuation">.</span>nn <span class="token keyword keyword-as">as</span> nn
+<span class="token keyword keyword-import">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword keyword-as">as</span> plt
+<span class="token keyword keyword-from">from</span> sklearn<span class="token punctuation">.</span>preprocessing <span class="token keyword keyword-import">import</span> MinMaxScaler
+
+<span class="token comment"># 假设df是包含股票数据的DataFrame，'Close'列包含我们想要预测的收盘价</span>
+<span class="token comment"># df = pd.read_csv('your_stock_data.csv')  # 如果你从CSV文件读取数据</span>
+
+<span class="token comment"># 为了简化，这里我们只使用收盘价</span>
+data <span class="token operator">=</span> df<span class="token punctuation">.</span><span class="token builtin">filter</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'Close'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 将数据转换为数组</span>
+dataset <span class="token operator">=</span> data<span class="token punctuation">.</span>values
+
+<span class="token comment"># 将数据集分为训练集和测试集</span>
+train_size <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>dataset<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">0.8</span><span class="token punctuation">)</span>
+test_size <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>dataset<span class="token punctuation">)</span> <span class="token operator">-</span> train_size
+train<span class="token punctuation">,</span> test <span class="token operator">=</span> dataset<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">:</span>train_size<span class="token punctuation">]</span><span class="token punctuation">,</span> dataset<span class="token punctuation">[</span>train_size<span class="token punctuation">:</span><span class="token builtin">len</span><span class="token punctuation">(</span>dataset<span class="token punctuation">)</span><span class="token punctuation">]</span>
+
+<span class="token comment"># 数据归一化</span>
+scaler <span class="token operator">=</span> MinMaxScaler<span class="token punctuation">(</span>feature_range<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+train_scaled <span class="token operator">=</span> scaler<span class="token punctuation">.</span>fit_transform<span class="token punctuation">(</span>train<span class="token punctuation">)</span>
+test_scaled <span class="token operator">=</span> scaler<span class="token punctuation">.</span>transform<span class="token punctuation">(</span>test<span class="token punctuation">)</span>
+
+<span class="token comment"># 创建数据集，其中X是特征，y是标签</span>
+<span class="token keyword keyword-def">def</span> <span class="token function">create_dataset</span><span class="token punctuation">(</span>dataset<span class="token punctuation">,</span> look_back<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  X<span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token keyword keyword-for">for</span> i <span class="token keyword keyword-in">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>dataset<span class="token punctuation">)</span> <span class="token operator">-</span> look_back <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+      a <span class="token operator">=</span> dataset<span class="token punctuation">[</span>i<span class="token punctuation">:</span><span class="token punctuation">(</span>i <span class="token operator">+</span> look_back<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span>
+      X<span class="token punctuation">.</span>append<span class="token punctuation">(</span>a<span class="token punctuation">)</span>
+      y<span class="token punctuation">.</span>append<span class="token punctuation">(</span>dataset<span class="token punctuation">[</span>i <span class="token operator">+</span> look_back<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+  <span class="token keyword keyword-return">return</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>X<span class="token punctuation">)</span><span class="token punctuation">,</span> np<span class="token punctuation">.</span>array<span class="token punctuation">(</span>y<span class="token punctuation">)</span>
+
+look_back <span class="token operator">=</span> <span class="token number">60</span>  <span class="token comment"># 定义时间步长</span>
+X_train<span class="token punctuation">,</span> y_train <span class="token operator">=</span> create_dataset<span class="token punctuation">(</span>train_scaled<span class="token punctuation">,</span> look_back<span class="token punctuation">)</span>
+X_test<span class="token punctuation">,</span> y_test <span class="token operator">=</span> create_dataset<span class="token punctuation">(</span>test_scaled<span class="token punctuation">,</span> look_back<span class="token punctuation">)</span>
+
+<span class="token comment"># 转换为PyTorch张量</span>
+X_train <span class="token operator">=</span> torch<span class="token punctuation">.</span>tensor<span class="token punctuation">(</span>X_train<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">float</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+y_train <span class="token operator">=</span> torch<span class="token punctuation">.</span>tensor<span class="token punctuation">(</span>y_train<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">float</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+X_test <span class="token operator">=</span> torch<span class="token punctuation">.</span>tensor<span class="token punctuation">(</span>X_test<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">float</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+y_test <span class="token operator">=</span> torch<span class="token punctuation">.</span>tensor<span class="token punctuation">(</span>y_test<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">float</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 重塑输入数据的形状 [samples, time steps, features]</span>
+X_train <span class="token operator">=</span> X_train<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>X_train<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> X_train<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+X_test <span class="token operator">=</span> X_test<span class="token punctuation">.</span>reshape<span class="token punctuation">(</span>X_test<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> X_test<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 定义LSTM模型</span>
+<span class="token keyword keyword-class">class</span> <span class="token class-name">LSTMModel</span><span class="token punctuation">(</span>nn<span class="token punctuation">.</span>Module<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token keyword keyword-def">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> input_dim<span class="token punctuation">,</span> hidden_dim<span class="token punctuation">,</span> layer_dim<span class="token punctuation">,</span> output_dim<span class="token punctuation">)</span><span class="token punctuation">:</span>
+      <span class="token builtin">super</span><span class="token punctuation">(</span>LSTMModel<span class="token punctuation">,</span> self<span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+      self<span class="token punctuation">.</span>hidden_dim <span class="token operator">=</span> hidden_dim
+      self<span class="token punctuation">.</span>layer_dim <span class="token operator">=</span> layer_dim
+      
+      <span class="token comment"># LSTM层</span>
+      self<span class="token punctuation">.</span>lstm <span class="token operator">=</span> nn<span class="token punctuation">.</span>LSTM<span class="token punctuation">(</span>input_dim<span class="token punctuation">,</span> hidden_dim<span class="token punctuation">,</span> layer_dim<span class="token punctuation">,</span> batch_first<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span>
+      
+      <span class="token comment"># 线性层</span>
+      self<span class="token punctuation">.</span>linear <span class="token operator">=</span> nn<span class="token punctuation">.</span>Linear<span class="token punctuation">(</span>hidden_dim<span class="token punctuation">,</span> output_dim<span class="token punctuation">)</span>
+  
+  <span class="token keyword keyword-def">def</span> <span class="token function">forward</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+      <span class="token comment"># 初始化隐藏状态和细胞状态</span>
+      h0 <span class="token operator">=</span> torch<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>self<span class="token punctuation">.</span>layer_dim<span class="token punctuation">,</span> x<span class="token punctuation">.</span>size<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>hidden_dim<span class="token punctuation">)</span><span class="token punctuation">.</span>requires_grad_<span class="token punctuation">(</span><span class="token punctuation">)</span>
+      c0 <span class="token operator">=</span> torch<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>self<span class="token punctuation">.</span>layer_dim<span class="token punctuation">,</span> x<span class="token punctuation">.</span>size<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> self<span class="token punctuation">.</span>hidden_dim<span class="token punctuation">)</span><span class="token punctuation">.</span>requires_grad_<span class="token punctuation">(</span><span class="token punctuation">)</span>
+      
+      <span class="token comment"># 前向传播</span>
+      out<span class="token punctuation">,</span> <span class="token punctuation">(</span>hn<span class="token punctuation">,</span> cn<span class="token punctuation">)</span> <span class="token operator">=</span> self<span class="token punctuation">.</span>lstm<span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token punctuation">(</span>h0<span class="token punctuation">.</span>detach<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> c0<span class="token punctuation">.</span>detach<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+      out <span class="token operator">=</span> self<span class="token punctuation">.</span>linear<span class="token punctuation">(</span>out<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 只取最后一个时间步的输出</span>
+      <span class="token keyword keyword-return">return</span> out
+
+input_dim <span class="token operator">=</span> <span class="token number">1</span>  <span class="token comment"># 特征维度</span>
+hidden_dim <span class="token operator">=</span> <span class="token number">50</span>  <span class="token comment"># 隐藏层维度</span>
+layer_dim <span class="token operator">=</span> <span class="token number">1</span>  <span class="token comment"># LSTM层数</span>
+output_dim <span class="token operator">=</span> <span class="token number">1</span>  <span class="token comment"># 输出维度</span>
+
+model <span class="token operator">=</span> LSTMModel<span class="token punctuation">(</span>input_dim<span class="token punctuation">,</span> hidden_dim<span class="token punctuation">,</span> layer_dim<span class="token punctuation">,</span> output_dim<span class="token punctuation">)</span>
+
+<span class="token comment"># 损失函数和优化器</span>
+criterion <span class="token operator">=</span> nn<span class="token punctuation">.</span>MSELoss<span class="token punctuation">(</span><span class="token punctuation">)</span>
+optimizer <span class="token operator">=</span> torch<span class="token punctuation">.</span>optim<span class="token punctuation">.</span>Adam<span class="token punctuation">(</span>model<span class="token punctuation">.</span>parameters<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> lr<span class="token operator">=</span><span class="token number">0.01</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 训练模型</span>
+num_epochs <span class="token operator">=</span> <span class="token number">100</span>
+<span class="token keyword keyword-for">for</span> epoch <span class="token keyword keyword-in">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>num_epochs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  model<span class="token punctuation">.</span>train<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  optimizer<span class="token punctuation">.</span>zero_grad<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  
+  <span class="token comment"># 前向传播</span>
+  outputs <span class="token operator">=</span> model<span class="token punctuation">(</span>X_train<span class="token punctuation">)</span>
+  
+  <span class="token comment"># 计算损失</span>
+  loss <span class="token operator">=</span> criterion<span class="token punctuation">(</span>outputs<span class="token punctuation">,</span> y_train<span class="token punctuation">)</span>
+  
+  <span class="token comment"># 反向传播和优化</span>
+  loss<span class="token punctuation">.</span>backward<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  optimizer<span class="token punctuation">.</span>step<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  
+  <span class="token keyword keyword-if">if</span> epoch <span class="token operator">%</span> <span class="token number">10</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+      <span class="token keyword keyword-print">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'Epoch </span><span class="token interpolation"><span class="token punctuation">{</span>epoch<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">}</span></span><span class="token string">/</span><span class="token interpolation"><span class="token punctuation">{</span>num_epochs<span class="token punctuation">}</span></span><span class="token string">, Loss: </span><span class="token interpolation"><span class="token punctuation">{</span>loss<span class="token punctuation">.</span>item<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">)</span>
+
+<span class="token comment"># 进行预测</span>
+model<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword keyword-with">with</span> torch<span class="token punctuation">.</span>no_grad<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+  train_predict <span class="token operator">=</span> model<span class="token punctuation">(</span>X_train<span class="token punctuation">)</span>
+  test_predict <span class="token operator">=</span> model<span class="token punctuation">(</span>X_test<span class="token punctuation">)</span>
+
+<span class="token comment"># 反归一化预测数据</span>
+train_predict <span class="token operator">=</span> scaler<span class="token punctuation">.</span>inverse_transform<span class="token punctuation">(</span>train_predict<span class="token punctuation">.</span>detach<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+test_predict <span class="token operator">=</span> scaler<span class="token punctuation">.</span>inverse_transform<span class="token punctuation">(</span>test_predict<span class="token punctuation">.</span>detach<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>numpy<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 绘制结果</span>
+plt<span class="token punctuation">.</span>figure<span class="token punctuation">(</span>figsize<span class="token operator">=</span><span class="token punctuation">(</span><span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>scaler<span class="token punctuation">.</span>inverse_transform<span class="token punctuation">(</span>dataset<span class="token punctuation">)</span><span class="token punctuation">,</span> label
+</code></pre></li>
+</ul>
+<h3 id="正在进行的工作"><strong>正在进行的工作</strong> </h3>
+<h4 id="1-前端开发">1. <strong>前端开发</strong>： </h4>
+<ul>
+<li>集成课程模板，设计用户界面布局。</li>
+<li>开发交互组件，如指令输入框和数据可视化面板。</li>
+</ul>
+<h4 id="2-agent模块开发">2. <strong>Agent模块开发</strong>： </h4>
+<ul>
+<li>编写Agent逻辑，支持基于大模型API的用户指令解析。</li>
+<li>搭建本地模型调用框架，将垂直任务结果反馈给用户。</li>
+</ul>
+<h4 id="3-spring-boot服务搭建">3. <strong>Spring Boot服务搭建</strong>： </h4>
+<ul>
+<li>开发中端RESTful API，连接前端和后端。</li>
+<li>实现数据查询和模型调用的接口。</li>
+</ul>
+<h4 id="4-数据库搭建">4. <strong>数据库搭建</strong>： </h4>
+<ul>
+<li>完成MySQL数据库的初始化，创建包含股票基本信息和交易数据的表结构。</li>
+<li>使用Python编写数据更新脚本，可定期从Tushare拉取新数据并更新数据库。</li>
+</ul>
+<h3 id="遇到的问题"><strong>遇到的问题</strong> </h3>
+<h4 id="1-数据实时性">1. <strong>数据实时性</strong>： </h4>
+<ul>
+<li>数据源（Tushare）的接口速率限制导致数据更新效率较低，正在尝试优化更新频率。</li>
+</ul>
+<h4 id="2-模型训练难点">2. <strong>模型训练难点</strong>： </h4>
+<ul>
+<li>Transformer模型对小样本时间序列数据敏感，当前训练结果不够稳定。</li>
+</ul>
+<h4 id="3-前后端交互">3. <strong>前后端交互</strong>： </h4>
+<ul>
+<li>大模型解析的指令多样性较高，可能需要进一步规范用户输入格式。</li>
+</ul>
+<hr>
+<h2 id="3-实施进度安排"><strong>3. 实施进度安排</strong> </h2>
+<h3 id="时间表"><strong>时间表</strong> </h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>时间范围</th>
+<th>任务内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一阶段</td>
+<td>已完成</td>
+<td>系统设计、数据采集、数据库搭建和模型选择。</td>
+</tr>
+<tr>
+<td>第二阶段</td>
+<td>1周内</td>
+<td>完成前端页面布局，Agent模块初步开发。</td>
+</tr>
+<tr>
+<td>第三阶段</td>
+<td>2周内</td>
+<td>完成Spring Boot服务开发，数据库与前端整合。</td>
+</tr>
+<tr>
+<td>第四阶段</td>
+<td>2周内</td>
+<td>深度学习模型的优化训练及本地部署。</td>
+</tr>
+<tr>
+<td>第五阶段</td>
+<td>3周内</td>
+<td>集成大模型API，完成整体测试和功能演示。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="分工安排"><strong>分工安排</strong> </h3>
+<ol>
+<li><strong>系统设计</strong>：
+<ul>
+<li>负责：系统模块划分、技术栈选型、接口设计、完成系统架构设计、数据库设计。</li>
+<li>成员：全体成员</li>
+</ul>
+</li>
+<li><strong>数据处理</strong>：
+<ul>
+<li>负责：数据预处理、实时更新脚本的优化。</li>
+<li>成员：李聪、丁健。</li>
+</ul>
+</li>
+<li><strong>前端开发</strong>：
+<ul>
+<li>负责：完成UI设计，确保功能组件与后台的接口对接。</li>
+<li>成员：李佳、李聪、崔家伟、童梓航。</li>
+</ul>
+</li>
+<li><strong>后端与模型</strong>：
+<ul>
+<li>负责：模型训练、服务接口设计与实现。</li>
+<li>成员：李聪、丁健、崔家伟、童梓航。</li>
+</ul>
+</li>
+<li><strong>集成与测试</strong>：
+<ul>
+<li>负责：大模型API与本地服务的集成，系统整体测试。</li>
+<li>成员：李佳、丁健。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="4-总结"><strong>4. 总结</strong> </h2>
+<p>系统开发已完成整体框架设计和关键模块的搭建工作，接下来将重点优化前端交互、Agent逻辑及模型性能。我们团队将按计划推进各项任务，确保系统在预定时间内完成并展示所有功能。</p>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+  
+    </body></html>

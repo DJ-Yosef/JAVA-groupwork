@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>所有电费账单</title>
+
+    <!-- Import layui CSS -->
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui-v2.6.8/css/layui.css" media="all">
+
+    <style>
+        /* Custom CSS for styling */
+        .layui-table th, .layui-table td {
+            text-align: center;
+        }
+
+        .layui-elem-field legend {
+            color: #009688; /* Dark green color for legend */
+        }
+
+        .layui-table th {
+            background-color: #f2f2f2; /* Light gray background for table headers */
+        }
+
+        .layui-table td, .layui-table th {
+            font-size: 16px; /* Font size */
+            padding: 12px; /* Padding for cells */
+        }
+
+        .unpaid {
+            background-color: #ffcccc; /* Light red background for unpaid bills */
+            font-weight: bold; /* Bold text for unpaid bills */
+        }
+    </style>
+</head>
+<body>
+
+<div class="layui-container" style="margin-top: 20px;">
+    <div class="layui-row">
+        <div class="layui-col-md-offset1 layui-col-md10">
+            <fieldset class="layui-elem-field">
+                <legend>我的电费账单</legend>
+                <div class="layui-field-box">
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>账单ID</th>
+                            <th>用户ID</th>
+                            <th>账单开始日期</th>
+                            <th>账单结束日期</th>
+                            <th>电费金额</th>
+                            <th>费率类型</th>
+                            <th>是否已缴纳</th>
+                            <th>总使用量</th>
+                            <th>用户名</th> <!-- New column for username -->
+                            <th>缴费</th> <!-- New column for payment action -->
+                        </tr>
+                        </thead>
+                        <tbody id="billTableBody">
+                        <!-- Bill data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+<!-- Import layui JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://www.layuicdn.com/layui-v2.6.8/layui.js"></script>
+
+<!-- Modal for payment method selection -->
+<div id="paymentModal" style="display: none;">
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择支付方式</label>
+            <div class="layui-input-block">
+                <button class="layui-btn" onclick="payWithAlipay()">支付宝</button>
+                <button class="layui-btn" onclick="payWithWeChat()">微信</button>
+                <button class="layui-btn" onclick="payWithBankCard()">银行卡</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for bank card payment -->
+<div id="bankCardModal" style="display: none;">
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">银行卡号</label>
+            <div class="layui-input-block">
+                <input type="text" id="bankCardNumber" placeholder="请输入银行卡号" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-block">
+                <input type="password" id="bankCardPassword" placeholder="请输入密码" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" onclick="confirmBankCardPayment()">确认支付</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Load data when page is ready
+    layui.use(['jquery', 'layer'], function(){
+        var $ = layui.$;
+        var layer = layui.layer;
+
+        var currentBillId = null; // Store the current bill ID
+
+        // Function to render table rows
+        function renderTable(data) {
+            var html = '';
+            for (var i = 0; i < data.length; i++) {
+                var bill = data[i];
+                var rowClass = bill.paid ? '' : 'unpaid'; // Add 'unpaid' class for unpaid bills
+                html += '<tr class="' + rowClass + '">';
+                html += '<td>' + bill.billId + '</td>';
+                html += '<td>' + bill.userId + '</td>';
+                html += '<td>' + bill.startDate + '</td>';
+                html += '<td>' + bill.endDate + '</td>';
+                html += '<td>' + bill.billAmount + '</td>';
+                html += '<td>' + bill.reteType + '</td>';
+                html += '<td>' + (bill.paid ? '是' : '否') + '</td>';
+                html += '<td>' + bill.totalUsage + '</td>';
+                html += '<td>' + bill.username + '</td>'; // Display username
+                html += '<td>';
+                if (bill.paid) {
+                    html += '<button class="layui-btn layui-btn-disabled" disabled>已缴费</button>';
+                } else {
+                    html += '<button class="layui-btn" onclick="payBill(' + bill.billId + ')">缴费</button>';
+                }
+                html += '</td>';
+                html += '</tr>';
+            }
+            $('#billTableBody').html(html); // Update table body
+        }
+
+        // AJAX call to fetch all electricity bills initially
+        $.ajax({
+            url: 'http://localhost:8080/electricity/bill/all',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data){
+                // Filter data by username (assuming 'username' is stored in localStorage)
+                var username = localStorage.getItem('username');
+                if (username) {
+                    var filteredData = data.filter(function(bill) {
+                        return bill.username === username;
+                    });
+                    renderTable(filteredData); // Render table with filtered data
+                } else {
+                    layer.msg("未找到登录用户信息，请先登录！");
+                }
+            },
+            error: function(xhr, status, error){
+                console.error('Failed to fetch data:', error);
+            }
+        });
+
+        // Function to handle payment
+        window.payBill = function(billId) {
+            currentBillId = billId; // Store the bill ID
+            layer.open({
+                type: 1,
+                title: '选择支付方式',
+                content: $('#paymentModal'),
+                area: ['300px', '200px']
+            });
+        };
+
+        window.payWithAlipay = function() {
+            layer.msg('目前不支持支付宝支付');
+        };
+
+        window.payWithWeChat = function() {
+            layer.msg('目前不支持微信支付');
+        };
+
+        window.payWithBankCard = function() {
+            layer.open({
+                type: 1,
+                title: '银行卡支付',
+                content: $('#bankCardModal'),
+                area: ['400px', '300px']
+            });
+        };
+
+        window.confirmBankCardPayment = function() {
+            var cardNumber = $('#bankCardNumber').val();
+            var password = $('#bankCardPassword').val();
+
+            if (!cardNumber || !password) {
+                layer.msg('请输入银行卡号和密码');
+                return;
+            }
+
+            layer.load(); // Show loading indicator
+
+            // Simulate a delay for processing payment
+            setTimeout(function() {
+                layer.closeAll('loading'); // Hide loading indicator
+                layer.closeAll(); // Close all modals
+
+                // Proceed with updating the payment status
+                fetch(`http://localhost:8080/electricity/bill/updatePaidStatus/${currentBillId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'paid=true'
+                })
+                    .then(response => response.text())
+                    .then(result => {
+                        layer.msg(result);
+                        // Reload the table data after successful payment
+                        $.ajax({
+                            url: 'http://localhost:8080/electricity/bill/all',
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data){
+                                var username = localStorage.getItem('username');
+                                if (username) {
+                                    var filteredData = data.filter(function(bill) {
+                                        return bill.username === username;
+                                    });
+                                    renderTable(filteredData); // Render table with filtered data
+                                }
+                            },
+                            error: function(xhr, status, error){
+                                console.error('Failed to fetch data:', error);
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error updating payment status:', error);
+                        layer.msg('更新电费账单缴纳状态失败');
+                    });
+            }, 2000); // Simulate 2 seconds delay
+        };
+    });
+</script>
+
+</body>
+</html>
