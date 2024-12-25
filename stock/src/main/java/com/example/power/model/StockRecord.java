@@ -8,6 +8,8 @@ import lombok.Data;
 @Data // 使用 Lombok 的 @Data 注解，自动生成 Getter、Setter、toString 等方法
 @TableName("stock_record") // 指定数据库表名
 public class StockRecord {
+    @TableId
+    private Integer id;
 
     // StockInfo 字段
     @TableField("buy_five")
