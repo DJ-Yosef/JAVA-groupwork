@@ -7,7 +7,8 @@ import io.github.briqt.spark4j.model.SparkSyncChatResponse;
 import io.github.briqt.spark4j.model.request.SparkRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +19,12 @@ public class SparkManager {
     @Resource
     private SparkClient sparkClient;
 
-    /**
-     * AI生成问题的预设条件
-     */
+    // AI生成问题的预设条件
     public static final String PRECONDITION = "你是一个专业的股票分析师，根据我提供的数据，进行分析和预测。\n" +
             "\n" +
             "\n" +
             "\n";
+
     public String sendMesToAIUseXingHuo(final String content) {
         List<SparkMessage> messages = new ArrayList<>();
         messages.add(SparkMessage.systemContent(PRECONDITION));
@@ -39,6 +39,25 @@ public class SparkManager {
         SparkSyncChatResponse chatResponse = sparkClient.chatSync(sparkRequest);
         String responseContent = chatResponse.getContent();
         log.info("AI return {}", responseContent);
-        return responseContent;
+
+        // 将Markdown格式转化为HTML
+        String htmlContent = MarkdownConverter.convertMarkdownToHtml(responseContent);
+        log.info("AI response in HTML: {}", htmlContent);
+
+        return htmlContent;
+    }
+
+    // 内部嵌套类，处理Markdown转HTML
+    static class MarkdownConverter {
+        public static String convertMarkdownToHtml(String markdown) {
+            Parser parser = Parser.builder().build();
+            HtmlRenderer renderer = HtmlRenderer.builder().build();
+
+            // 解析Markdown文本
+            org.commonmark.node.Node document = parser.parse(markdown);
+
+            // 渲染为HTML
+            return renderer.render(document);
+        }
     }
 }

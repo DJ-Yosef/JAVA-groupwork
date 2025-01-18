@@ -1,11 +1,31 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/stock?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://127.0.0.1:3306/stock?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: 20190709
+    hikari:
+      maximum-pool-size: 10  # 配置连接池的最大连接数
+      minimum-idle: 2       # 配置最小空闲连接数
+      idle-timeout: 30000   # 配置连接最大空闲时间（毫秒）
+      connection-timeout: 30000  # 配置连接超时时间（毫秒）
 
+  mvc:
+    static-path-pattern: /static/**  # 配置静态资源路径
 
+  web:
+    resources:
+      static-locations: classpath:/static/  # 指定静态资源存储路径
+
+  servlet:
+    context-path: /api  # 设置全局访问路径前缀，例如 http://localhost:8089/api
+
+logging:
+  level:
+    root: info          # 全局日志级别
+    com.example: debug  # 指定包的日志级别
+  file:
+    name: logs/app.log  # 指定日志文件路径和名称
 
 xunfei:
   client:
@@ -13,6 +33,5 @@ xunfei:
     apiSecret: ZGI5NWM3OGM4OWYyMTdkODQxYmY4YTM2
     apiKey: 441b6877e7bf5068e08f63a0bfc8984e
 
-
 server:
-  port: 8089
+  port: 8089  # 配置服务器运行端口
