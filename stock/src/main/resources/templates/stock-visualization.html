@@ -23,6 +23,21 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+        .stock-info-highlight {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+        .stock-info-highlight span {
+            display: block;
+        }
+        .stock-details {
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
         .stock-select {
             margin-bottom: 20px;
             text-align: center;
@@ -59,11 +74,6 @@
             width: 100%;
             height: 400px;
         }
-        .stock-info {
-            margin-top: 20px;
-            font-size: 16px;
-            line-height: 1.8;
-        }
     </style>
 </head>
 <body>
@@ -77,30 +87,31 @@
         </select>
     </div>
 
-    <!-- 条形图 -->
-    <div class="chart-card">
-        <div class="chart-card-header">条形图 - 成交量与成交金额</div>
-        <div class="chart-card-body">
-            <div id="barChart" class="chart-container"></div>
-            <div class="stock-info" id="barInfo"></div>
-        </div>
-    </div>
+    <!-- 高亮显示股票信息 -->
+    <div class="stock-info-highlight" id="highlightInfo"></div>
+    <div class="stock-details" id="detailsInfo"></div>
 
-    <!-- 饼图 -->
+    <!-- 饼图 - 买卖盘比例 -->
     <div class="chart-card">
-        <div class="chart-card-header">饼图 - 买卖盘比例</div>
+        <div class="chart-card-header">买卖盘比例一览</div>
         <div class="chart-card-body">
             <div id="pieChart" class="chart-container"></div>
-            <div class="stock-info" id="pieInfo"></div>
         </div>
     </div>
 
-    <!-- 折线图 -->
+    <!-- 折线图 - 买卖盘价格 -->
     <div class="chart-card">
-        <div class="chart-card-header">折线图 - 价格走势</div>
+        <div class="chart-card-header">买卖盘五档价格一览</div>
         <div class="chart-card-body">
-            <div id="lineChart" class="chart-container"></div>
-            <div class="stock-info" id="lineInfo"></div>
+            <div id="priceChart" class="chart-container"></div>
+        </div>
+    </div>
+
+    <!-- 折线图 - 买卖盘数量 -->
+    <div class="chart-card">
+        <div class="chart-card-header">买卖盘五档数量一览</div>
+        <div class="chart-card-body">
+            <div id="volumeChart" class="chart-container"></div>
         </div>
     </div>
 </div>
@@ -121,56 +132,54 @@
         })
         .catch(error => console.error('Error fetching stock names:', error));
 
-    // 监听下拉框变化，动态加载图表和信息
+    // 监听下拉框变化，动态加载数据和图表
     document.getElementById('stockName').addEventListener('change', function () {
         const selectedName = this.value;
         if (selectedName) {
             fetch(`http://localhost:8089/stock/getLatestRecordByName?name=${selectedName}`)
                 .then(response => response.json())
                 .then(data => {
-                    // 更新图表和信息
-                    updateCharts(data);
+                    // 更新股票信息
                     updateStockInfo(data);
+                    // 更新图表
+                    updateCharts(data);
                 })
                 .catch(error => console.error('Error fetching stock data:', error));
         } else {
-            // 清空图表和信息
-            clearCharts();
             clearStockInfo();
+            clearCharts();
         }
     });
 
-    // 初始化 ECharts 图表
-    const barChart = echarts.init(document.getElementById('barChart'));
+    // 更新股票信息
+    function updateStockInfo(data) {
+        document.getElementById('highlightInfo').innerHTML = `
+            <span>日期: ${data.date}</span>
+            <span>涨跌金额: ${data.increase}</span>
+            <span>涨跌百分比: ${data.increPer}%</span>
+        `;
+        document.getElementById('detailsInfo').innerHTML = `
+            当日开盘价: ${data.todayStartPri} 元<br>
+            当日最低价: ${data.todayMin} 元<br>
+            当日最高价: ${data.todayMax} 元<br>
+            成交金额: ${data.traAmount} 元<br>
+            成交数量: ${data.traNumber} 手
+        `;
+    }
+
+    // 清空股票信息
+    function clearStockInfo() {
+        document.getElementById('highlightInfo').textContent = '';
+        document.getElementById('detailsInfo').textContent = '';
+    }
+
+    // 初始化图表
     const pieChart = echarts.init(document.getElementById('pieChart'));
-    const lineChart = echarts.init(document.getElementById('lineChart'));
+    const priceChart = echarts.init(document.getElementById('priceChart'));
+    const volumeChart = echarts.init(document.getElementById('volumeChart'));
 
     // 更新图表
     function updateCharts(data) {
-        // 条形图 - 成交量与成交金额
-        barChart.setOption({
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
-            },
-            xAxis: {
-                type: 'category',
-                data: ['成交量', '成交金额']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [{
-                data: [data.traNumber, data.traAmount],
-                type: 'bar',
-                itemStyle: {
-                    color: '#5470C6'
-                }
-            }]
-        });
-
         // 饼图 - 买卖盘比例
         pieChart.setOption({
             tooltip: {
@@ -194,65 +203,162 @@
             }]
         });
 
-        // 折线图 - 价格走势
-        lineChart.setOption({
+        // 买卖盘价格折线图
+        const yAxisRange = calculateYAxisRange(data);
+        priceChart.setOption({
             tooltip: {
-                trigger: 'axis'
+                trigger: 'axis',
+                formatter: function (params) {
+                    let content = `${params[0].axisValue}<br>`;
+                    params.forEach(item => {
+                        content += `${item.marker}${item.seriesName}: ${item.data}<br>`;
+                    });
+                    return content;
+                }
+            },
+            legend: {
+                data: ['买价', '卖价'],
+                top: 10
             },
             xAxis: {
                 type: 'category',
-                data: ['买一', '买二', '买三', '买四', '买五', '卖一', '卖二', '卖三', '卖四', '卖五']
+                data: ['买一', '买二', '买三', '买四', '买五'] // 横轴展示五档
             },
             yAxis: {
-                type: 'value'
+                type: 'value',
+                name: '价格 (元)',
+                axisLabel: {
+                    formatter: '{value}'
+                },
+                min: yAxisRange.min,
+                max: yAxisRange.max
             },
-            series: [{
-                data: [
-                    data.buyOnePri, data.buyTwoPri, data.buyThreePri, data.buyFourPri, data.buyFivePri,
-                    data.sellOnePri, data.sellTwoPri, data.sellThreePri, data.sellFourPri, data.sellFivePri
-                ],
-                type: 'line',
-                smooth: true,
-                itemStyle: {
-                    color: '#EE6666'
+            series: [
+                {
+                    name: '买价',
+                    data: [data.buyOnePri, data.buyTwoPri, data.buyThreePri, data.buyFourPri, data.buyFivePri],
+                    type: 'line',
+                    smooth: true,
+                    itemStyle: {
+                        color: '#5470C6'
+                    },
+                    label: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                {
+                    name: '卖价',
+                    data: [data.sellOnePri, data.sellTwoPri, data.sellThreePri, data.sellFourPri, data.sellFivePri],
+                    type: 'line',
+                    smooth: true,
+                    itemStyle: {
+                        color: '#EE6666'
+                    },
+                    label: {
+                        show: true,
+                        formatter: '{c}'
+                    }
                 }
-            }]
+            ]
         });
-    }
 
-    // 更新股票信息
-    function updateStockInfo(data) {
-        document.getElementById('barInfo').innerHTML = `
-            <p><strong>股票名称:</strong> ${data.name}</p>
-            <p><strong>当前价格:</strong> ${data.nowPri}</p>
-            <p><strong>涨跌金额:</strong> ${data.increase}</p>
-            <p><strong>涨跌百分比:</strong> ${data.increPer}%</p>
-        `;
-
-        document.getElementById('pieInfo').innerHTML = `
-            <p><strong>买五数量:</strong> ${data.buyFive}</p>
-            <p><strong>卖五数量:</strong> ${data.sellFive}</p>
-        `;
-
-        document.getElementById('lineInfo').innerHTML = `
-            <p><strong>今日最高价:</strong> ${data.todayMax}</p>
-            <p><strong>今日最低价:</strong> ${data.todayMin}</p>
-            <p><strong>昨日收盘价:</strong> ${data.yestodEndPri}</p>
-        `;
+        // 买卖盘数量折线图
+        const yAxisRangeForVolume = calculateYAxisRangeForVolume(data);
+        volumeChart.setOption({
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    let content = `${params[0].axisValue}<br>`;
+                    params.forEach(item => {
+                        content += `${item.marker}${item.seriesName}: ${item.data}<br>`;
+                    });
+                    return content;
+                }
+            },
+            legend: {
+                data: ['买盘数量', '卖盘数量'],
+                top: 10
+            },
+            xAxis: {
+                type: 'category',
+                data: ['买一', '买二', '买三', '买四', '买五'] // 横轴展示五档
+            },
+            yAxis: {
+                type: 'value',
+                name: '数量',
+                axisLabel: {
+                    formatter: '{value}'
+                },
+                min: yAxisRangeForVolume.min,
+                max: yAxisRangeForVolume.max
+            },
+            series: [
+                {
+                    name: '买盘数量',
+                    data: [data.buyOne, data.buyTwo, data.buyThree, data.buyFour, data.buyFive],
+                    type: 'line',
+                    smooth: true,
+                    itemStyle: {
+                        color: '#5470C6'
+                    },
+                    label: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                },
+                {
+                    name: '卖盘数量',
+                    data: [data.sellOne, data.sellTwo, data.sellThree, data.sellFour, data.sellFive],
+                    type: 'line',
+                    smooth: true,
+                    itemStyle: {
+                        color: '#EE6666'
+                    },
+                    label: {
+                        show: true,
+                        formatter: '{c}'
+                    }
+                }
+            ]
+        });
     }
 
     // 清空图表
     function clearCharts() {
-        barChart.clear();
         pieChart.clear();
-        lineChart.clear();
+        priceChart.clear();
+        volumeChart.clear();
     }
 
-    // 清空股票信息
-    function clearStockInfo() {
-        document.getElementById('barInfo').innerHTML = '';
-        document.getElementById('pieInfo').innerHTML = '';
-        document.getElementById('lineInfo').innerHTML = '';
+    // 动态计算纵轴范围（买卖盘价格）
+    function calculateYAxisRange(data) {
+        const allPrices = [
+            data.buyOnePri, data.buyTwoPri, data.buyThreePri, data.buyFourPri, data.buyFivePri,
+            data.sellOnePri, data.sellTwoPri, data.sellThreePri, data.sellFourPri, data.sellFivePri
+        ];
+        const minPrice = Math.min(...allPrices); // 计算最小值
+        const maxPrice = Math.max(...allPrices); // 计算最大值
+        const padding = (maxPrice - minPrice) * 0.1; // 动态设置上下边距为10%
+        return {
+            min: Math.max(0, minPrice - padding),
+            max: maxPrice + padding
+        };
+    }
+
+    // 动态计算纵轴范围（买卖盘数量）
+    function calculateYAxisRangeForVolume(data) {
+        const allVolumes = [
+            data.buyOne, data.buyTwo, data.buyThree, data.buyFour, data.buyFive,
+            data.sellOne, data.sellTwo, data.sellThree, data.sellFour, data.sellFive
+        ];
+        const minVolume = Math.min(...allVolumes);
+        const maxVolume = Math.max(...allVolumes);
+        const padding = (maxVolume - minVolume) * 0.1;
+        return {
+            min: Math.max(0, minVolume - padding),
+            max: maxVolume + padding
+        };
     }
 </script>
 </body>
