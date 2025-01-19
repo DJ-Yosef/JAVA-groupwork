@@ -24,10 +24,38 @@ public class StockRecordController {
     public StockRecord getLatestRecordByName(@RequestParam String name) {
         return stockRecordService.getLatestRecordByName(name);
     }
+
+    /**
+     * 根据股票代码 gid 查询对应的最新记录
+     * 1. 通过 gid 获取股票名称
+     * 2. 再根据股票名称获取最新记录
+     *
+     * @param gid 股票代码
+     * @return 最新的股票记录
+     */
+    @GetMapping("/getLatestRecordById")
+    public StockRecord getLatestRecordById(@RequestParam String gid) {
+        // 通过 gid 获取股票名称
+        String stockName = stockRecordService.getLatestStockNameByGid(gid);
+
+        if (stockName == null) {
+            return null;  // 如果找不到对应的股票名称，返回 null
+        }
+
+        // 根据股票名称获取最新的股票记录
+        return stockRecordService.getLatestRecordByName(stockName);
+    }
+
+    /**
+     * 获取所有股票名称
+     *
+     * @return 股票名称列表
+     */
     @GetMapping("/getStockNames")
     public List<String> getStockNames() {
         return stockRecordService.getStockNamesList();
     }
+
     /**
      * 保存股票记录
      *

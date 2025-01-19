@@ -31,12 +31,25 @@
             font-size: 16px;
             margin-right: 10px;
         }
-        .stock-select select {
+        .stock-select input {
             padding: 8px 12px;
             font-size: 16px;
             border: 1px solid #ddd;
             border-radius: 4px;
             outline: none;
+        }
+        .stock-select button {
+            padding: 8px 16px;
+            font-size: 16px;
+            margin-left: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .stock-select button:hover {
+            background-color: #0056b3;
         }
         .chart-card {
             margin-bottom: 20px;
@@ -66,14 +79,12 @@
 <body>
 <h2>股票走势图</h2>
 <div class="container">
-    <!-- 股票名称下拉框 -->
+    <!-- 股票gid输入框 -->
     <div class="stock-select">
-        <label for="stockName">选择股票:</label>
-        <select id="stockName">
-            <option value="">请选择股票</option>
-        </select>
+        <label for="stockGid">输入股票 GID:</label>
+        <input type="text" id="stockGid" placeholder="请输入股票 GID">
+        <button id="confirmBtn">确认</button>
     </div>
-
 
     <div class="chart-card">
         <div class="chart-card-header">日K线图</div>
@@ -95,32 +106,26 @@
 </div>
 
 <script>
-    // 获取所有股票名称并填充到下拉框
-    fetch('http://localhost:8089/stock/getStockNames')
-        .then(response => response.json())
-        .then(data => {
-            const select = document.getElementById('stockName');
-            data.forEach(name => {
-                const option = document.createElement('option');
-                option.value = name;
-                option.textContent = name;
-                select.appendChild(option);
-            });
-        })
-        .catch(error => console.error('Error fetching stock names:', error));
-
-    // 监听下拉框变化，动态加载股票走势图
-    document.getElementById('stockName').addEventListener('change', function () {
-        const selectedName = this.value;
-        if (selectedName) {
-            fetch(`http://localhost:8089/stock/getLatestRecordByName?name=${selectedName}`)
+    // 监听确认按钮点击事件
+    document.getElementById('confirmBtn').addEventListener('click', function () {
+        const gid = document.getElementById('stockGid').value.trim();
+        if (gid) {
+            fetch(`http://localhost:8089/stock/getLatestRecordById?gid=${gid}`)
                 .then(response => response.json())
                 .then(data => {
-                    // 显示图片
-                    document.getElementById('minUrl').innerHTML = `<img src="${data.minurl}" alt="分时走势图">`;
-                    document.getElementById('dayUrl').innerHTML = `<img src="${data.dayurl}" alt="日K线图">`;
-                    document.getElementById('weekUrl').innerHTML = `<img src="${data.weekurl}" alt="周K线图">`;
-                    document.getElementById('monthUrl').innerHTML = `<img src="${data.monthurl}" alt="月K线图">`;
+                    if (data) {
+                        // 显示图片
+                        document.getElementById('minUrl').innerHTML = `<img src="${data.minurl}" alt="分时走势图">`;
+                        document.getElementById('dayUrl').innerHTML = `<img src="${data.dayurl}" alt="日K线图">`;
+                        document.getElementById('weekUrl').innerHTML = `<img src="${data.weekurl}" alt="周K线图">`;
+                        document.getElementById('monthUrl').innerHTML = `<img src="${data.monthurl}" alt="月K线图">`;
+                    } else {
+                        // 清空图片
+                        document.getElementById('minUrl').innerHTML = '';
+                        document.getElementById('dayUrl').innerHTML = '';
+                        document.getElementById('weekUrl').innerHTML = '';
+                        document.getElementById('monthUrl').innerHTML = '';
+                    }
                 })
                 .catch(error => console.error('Error fetching stock data:', error));
         } else {

@@ -36,26 +36,14 @@ public class DataAnalysis {
     private StockRecordService stockRecordService;
 
 
-     @GetMapping("/askAIanswer")
-     public String answerQuestion(@RequestParam String ask,@RequestParam String name) {
+    @GetMapping("/askAIanswer")
+    public String answerQuestion(@RequestParam String ask, @RequestParam String name) {
 
-        // 原始的 stockMap
-        Map<String, String> stockMap1 = new HashMap<>();
-        stockMap1.put("sz000938", "紫光股份");
-        stockMap1.put("sz002049", "紫光国微");
-        stockMap1.put("sh601901", "方正证券");
-        stockMap1.put("sz002294", "信立泰");
-        stockMap1.put("sz002030", "达安基因");
-        // 直接在创建时反转 key 和 value
-        Map<String, String> reversedStockMap = new HashMap<>();
-        for (Map.Entry<String, String> entry : stockMap1.entrySet()) {
-            reversedStockMap.put(entry.getValue(), entry.getKey());
-        }
-        name = reversedStockMap.get(name);
-
+        // 直接使用传入的name作为gid，去掉原来反转stockMap的逻辑
+        String gid = name;
 
         // 硬编码的请求参数
-        String url = "http://web.juhe.cn/finance/stock/hs?key=feda13679811972f011db554e2f863e4" + "&gid=" + name ;
+        String url = "http://web.juhe.cn/finance/stock/hs?key=feda13679811972f011db554e2f863e4" + "&gid=" + gid;
 
         // 设置请求头
         HttpHeaders headers = new HttpHeaders();
@@ -63,10 +51,7 @@ public class DataAnalysis {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         // 发送GET请求
-
-        ResponseEntity<MainResponse> response =  restTemplate.exchange(url, HttpMethod.GET, entity, MainResponse.class);
-
-
+        ResponseEntity<MainResponse> response = restTemplate.exchange(url, HttpMethod.GET, entity, MainResponse.class);
 
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
             MainResponse body = response.getBody();
@@ -77,12 +62,10 @@ public class DataAnalysis {
                 StockRecord stockRecord = stockRecordService.convertToStockRecord(stockResult);
                 stockRecordService.save(stockRecord);
             }
-
-         }
+        }
         StockResult stockResult = response.getBody().getResult().get(0);
 
-
-        String ask1 = "咨询类问题：这是我的问题：" + ask + "请你基本以下的股票数据回答" + stockResult.toString();
+        String ask1 = "咨询类问题：这是我的问题：" + ask + "请你根据以下的股票数据回答" + stockResult.toString();
         String answer = sparkManager.sendMesToAIUseXingHuo(ask1.toString()); // 调用 AI 接口获取答案
         return answer;
     }

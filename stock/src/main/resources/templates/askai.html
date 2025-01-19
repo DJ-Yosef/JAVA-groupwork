@@ -73,17 +73,23 @@
             border-top: 1px solid #ccc;
         }
         .input-container select,
-        .input-container input,
-        .input-container button {
-            margin-right: 10px;
-        }
-        .input-container select,
         .input-container input {
             flex: 1;
+            width: 50%; /* 宽度减少约50% */
             padding: 8px;
+            margin-right: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
             outline: none;
+            font-size: 14px;
+            background-color: #fff;
+        }
+        .input-container select {
+            appearance: none; /* 移除原生下拉框样式 */
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23009688'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px 16px;
         }
         .input-container button {
             padding: 8px 16px;
@@ -93,6 +99,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin-right: 8px; /* 添加右边距 */
         }
         .input-container button:hover {
             background-color: #007d6a;
@@ -138,10 +145,8 @@
             <option value="predict">预测类</option>
         </select>
 
-        <!-- 选择股票名称 -->
-        <select id="stockSelect">
-            <option value="">请选择股票</option>
-        </select>
+        <!-- 输入股票gid -->
+        <input type="text" id="stockInput" placeholder="请输入股票gid...">
 
         <!-- 输入问题 -->
         <input type="text" id="inputMessage" placeholder="请输入你的问题...">
@@ -196,27 +201,13 @@
         }
     }
 
-    // 获取所有股票名称并填充到下拉框
-    fetch('http://localhost:8089/stock/getStockNames')
-        .then(response => response.json())
-        .then(data => {
-            const stockSelect = document.getElementById('stockSelect');
-            data.forEach(name => {
-                const option = document.createElement('option');
-                option.value = name;
-                option.textContent = name;
-                stockSelect.appendChild(option);
-            });
-        })
-        .catch(error => console.error('Error fetching stock names:', error));
-
     // 发送消息
     document.getElementById('sendButton').addEventListener('click', () => {
         const inputMessage = document.getElementById('inputMessage').value;
         const typeSelect = document.getElementById('typeSelect').value;
-        const stockSelect = document.getElementById('stockSelect').value;
+        const stockInput = document.getElementById('stockInput').value;
 
-        if (inputMessage.trim() === '' || stockSelect === '') return;
+        if (inputMessage.trim() === '' || stockInput.trim() === '') return;
 
         // 添加用户消息到聊天记录
         chatHistory.push({ role: 'user', content: inputMessage });
@@ -227,7 +218,7 @@
         document.getElementById('inputMessage').value = '';
 
         // 调用后端接口
-        fetch(`http://localhost:8089/AI/${typeSelect === 'consult' ? 'askAIanswer' : 'predictStockData'}?ask=${encodeURIComponent(inputMessage)}&name=${encodeURIComponent(stockSelect)}`)
+        fetch(`http://localhost:8089/AI/${typeSelect === 'consult' ? 'askAIanswer' : 'predictStockData'}?ask=${encodeURIComponent(inputMessage)}&name=${encodeURIComponent(stockInput)}`)
             .then(response => response.text())
             .then(data => {
                 // 添加AI的回答到聊天记录

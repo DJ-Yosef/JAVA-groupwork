@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.power.model.*;
 import com.example.power.repository.StockRecordMapper;
 import org.springframework.stereotype.Service;
+import com.example.power.model.StockRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.List;
@@ -174,5 +176,32 @@ public class StockRecordService extends ServiceImpl<StockRecordMapper, StockReco
                 .last("LIMIT 3");  // 取前三条记录
 
         return list(queryWrapper);
+    }
+
+    @Autowired
+    private StockRecordMapper stockRecordMapper;
+
+    /**
+     * 根据股票代码（gid）查询最新的股票名称
+     *
+     * @param gid 股票代码
+     * @return 最新的股票名称
+     */
+    public String getLatestStockNameByGid(String gid) {
+        // 使用 QueryWrapper 查询股票记录，根据 gid 和 id 降序排列，取最新的一条记录
+        QueryWrapper<StockRecord> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("gid", gid)  // 根据 gid 查询
+                .orderByDesc("id")  // 按 id 降序排列，取最新的记录
+                .last("LIMIT 1");  // 限制只取一条记录
+
+        // 查询结果
+        StockRecord stockRecord = getOne(queryWrapper);
+
+        // 返回股票名称
+        if (stockRecord != null) {
+            return stockRecord.getName();
+        } else {
+            return null;  // 未找到对应的记录
+        }
     }
 }
